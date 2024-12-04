@@ -7,6 +7,7 @@ import { expect } from '@jest/globals';
 import { SessionService } from '../../../../services/session.service';
 
 import { DetailComponent } from './detail.component';
+import { SessionApiService } from '../../services/session-api.service';
 
 
 describe('DetailComponent', () => {
@@ -44,3 +45,40 @@ describe('DetailComponent', () => {
   });
 });
 
+describe('DetailComponentComplementaryTest', () => {
+  let component: DetailComponent;
+  let fixture: ComponentFixture<DetailComponent>;
+  let sessionApiService: jest.Mocked<SessionApiService>;
+
+  const mockSessionService = {
+    sessionInformation: {
+      admin: true,
+      id: 1,
+    },
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule,
+        HttpClientModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+      ],
+      declarations: [DetailComponent],
+      providers: [{ provide: SessionService, useValue: mockSessionService }],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(DetailComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should call window.history.back() when back() is invoked', () => {
+    const historyBackSpy = jest.spyOn(window.history, 'back'); // Spy sur window.history.back
+
+    component.back();
+
+    expect(historyBackSpy).toHaveBeenCalled(); // Vérifie que history.back() a été appelé
+  });
+});
