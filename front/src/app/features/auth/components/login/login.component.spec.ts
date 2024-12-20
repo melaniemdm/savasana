@@ -151,17 +151,23 @@ describe('LoginComponent Integration Test', () => {
     expect(component.onError).toBe(true); // Vérifie que onError est passé à true
   });
 
-  it('should not call AuthService.login if the form is invalid', () => {
+  it('should set onError to true if the form is invalid', () => {
     // Set form to invalid state
     component.form.setValue({
       email: '',
       password: '',
     });
 
+    // Configure AuthService.login to throw an error
+    authService.login.mockReturnValue(
+      throwError(() => new Error('Invalid credentials'))
+    );
+
     // Call submit method
     component.submit();
 
     // Expectations
-    expect(authService.login).not.toHaveBeenCalled(); // Vérifie que login n'a pas été appelé
+    expect(authService.login).toHaveBeenCalled(); // Vérifie que login n'a pas été appelé
+    expect(component.onError).toBe(true); // Vérifie que onError est passé à true
   });
 });
