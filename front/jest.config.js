@@ -9,6 +9,7 @@ module.exports = {
   collectCoverage: false,
   coverageDirectory: './coverage/jest',
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  modulePathIgnorePatterns: ["instrumented"],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
   coverageThreshold: {
     global: {
