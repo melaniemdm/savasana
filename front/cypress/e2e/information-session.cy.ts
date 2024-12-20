@@ -35,7 +35,7 @@ it('session information is correctly displayed', ()=>{
     cy.contains('New Yoga fun session for babies').should('be.visible')
     cy.contains('Detail').should('be.visible')
     cy.contains('Edit').should('be.visible')
-    cy.contains('Session on December 13, 2024').should('be.visible');
+    cy.contains('Session on ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })).should('be.visible');
     cy.get('img') 
       .should('be.visible') 
       .and('have.attr', 'src', 'assets/sessions.png') // Vérifier l'attribut src
