@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-describe('informations sessions spec', ()=>{
-it('session information is correctly displayed', ()=>{
+describe('informations sessions spec', () => {
+  it('session information is correctly displayed', () => {
     cy.visit('/login')
 
     cy.intercept('POST', '/api/auth/login', {
@@ -22,27 +22,27 @@ it('session information is correctly displayed', ()=>{
         date: new Date().toISOString().split('T')[0],
         teacher_id: 1,
         description: 'New Yoga fun session for babies',
-      }     
-    ],
+      }
+      ],
     }).as('session')
-   
+
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
-    
-    cy.url().should('include', '/sessions') 
-//Vérification des elements de l'image
+
+    cy.url().should('include', '/sessions')
+    //Vérification des elements de l'image
     cy.contains('Yoga fun bébé').should('be.visible')
     cy.contains('New Yoga fun session for babies').should('be.visible')
     cy.contains('Detail').should('be.visible')
     cy.contains('Edit').should('be.visible')
     cy.contains('Session on ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })).should('be.visible');
-    cy.get('img') 
-      .should('be.visible') 
+    cy.get('img')
+      .should('be.visible')
       .and('have.attr', 'src', 'assets/sessions.png') // Vérifier l'attribut src
       .and('have.attr', 'alt', 'Yoga session'); // Vérifier l'attribut alt
 
-})
-it('delete button appears if the user is an admin', ()=>{
+  })
+  it('delete button appears if the user is an admin', () => {
 
     cy.visit('/login')
 
@@ -67,7 +67,7 @@ it('delete button appears if the user is an admin', ()=>{
       }],
     }).as('session')
 
-  // Interception de la requête GET pour le détail d'une session
+    // Interception de la requête GET pour le détail d'une session
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -81,9 +81,9 @@ it('delete button appears if the user is an admin', ()=>{
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
     cy.get('button:has(span.ml1:contains("Detail"))').click()
-cy.contains('delete').should('be.visible')
-})
-it('delete button not appears if the user is not an admin', ()=>{
+    cy.contains('delete').should('be.visible')
+  })
+  it('delete button not appears if the user is not an admin', () => {
 
     cy.visit('/login')
 
@@ -108,7 +108,7 @@ it('delete button not appears if the user is not an admin', ()=>{
       }],
     }).as('session')
 
-  // Interception de la requête GET pour le détail d'une session
+    // Interception de la requête GET pour le détail d'une session
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -122,7 +122,7 @@ it('delete button not appears if the user is not an admin', ()=>{
     cy.get('input[formControlName=email]').type("mela@me.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
     cy.get('button:has(span.ml1:contains("Detail"))').click()
-cy.contains('delete').should('not.exist')
-})
+    cy.contains('delete').should('not.exist')
+  })
 
 })

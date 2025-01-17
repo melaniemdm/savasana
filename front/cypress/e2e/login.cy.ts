@@ -26,57 +26,57 @@ describe('Login spec', () => {
 
     cy.url().should('include', '/sessions')
   })
-  
+
   it('Login fail', () => {
-     // Visiter la page de login
-  cy.visit('/login') 
+    // Visiter la page de login
+    cy.visit('/login')
 
-  // Interception de la requête POST /api/auth/login avec une erreur
-  cy.intercept('POST', '/api/auth/login', {
-    statusCode: 401, // Erreur d'authentification
-    body: {
-      error: 'Invalid credentials',
-    },
-  }).as('loginFail')
+    // Interception de la requête POST /api/auth/login avec une erreur
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 401, // Erreur d'authentification
+      body: {
+        error: 'Invalid credentials',
+      },
+    }).as('loginFail')
 
-  // Entrer les identifiants incorrects
-  cy.get('input[formControlName=email]').type("yoga@studio.com")
-  cy.get('input[formControlName=password]').type("wrongpassword")
-  
-  // Soumettre le formulaire
-  cy.get('button[type=submit]').click()
+    // Entrer les identifiants incorrects
+    cy.get('input[formControlName=email]').type("yoga@studio.com")
+    cy.get('input[formControlName=password]').type("wrongpassword")
 
-  // Attendre la requête POST /api/auth/login
-  cy.wait('@loginFail')
+    // Soumettre le formulaire
+    cy.get('button[type=submit]').click()
 
-  // Vérifier que l'URL ne change pas (l'utilisateur reste sur /login)
-  cy.url().should('include', '/login')
+    // Attendre la requête POST /api/auth/login
+    cy.wait('@loginFail')
 
-  // Vérifier que le message d'erreur s'affiche
-  cy.contains('An error occurred').should('be.visible')
-  
-  cy.visit('/sessions')
-  //retourne sur login
-  cy.url().should('include', '/login')
+    // Vérifier que l'URL ne change pas (l'utilisateur reste sur /login)
+    cy.url().should('include', '/login')
+
+    // Vérifier que le message d'erreur s'affiche
+    cy.contains('An error occurred').should('be.visible')
+
+    cy.visit('/sessions')
+    //retourne sur login
+    cy.url().should('include', '/login')
   })
 
 
-  it('error handling in the absence of a mandatory field', () => {  
-   // Visiter la page de login
-  cy.visit('/login')    
+  it('error handling in the absence of a mandatory field', () => {
+    // Visiter la page de login
+    cy.visit('/login')
 
-  // Entrer un email mais laisser le champ "password" vide
-  cy.get('input[formControlName=email]').type("yoga@studio.com")
-  
-  // Vérifier que le bouton de soumission est désactivé
-  cy.contains('Submit').should('be.disabled')
-  
-  cy.get('input[formControlName=password]').click()
-  cy.get('input[formControlName=email]').click()
+    // Entrer un email mais laisser le champ "password" vide
+    cy.get('input[formControlName=email]').type("yoga@studio.com")
 
- cy.contains('Password').should('have.css', 'color', 'rgb(244, 67, 54)')
+    // Vérifier que le bouton de soumission est désactivé
+    cy.contains('Submit').should('be.disabled')
 
-  
+    cy.get('input[formControlName=password]').click()
+    cy.get('input[formControlName=email]').click()
+
+    cy.contains('Password').should('have.css', 'color', 'rgb(244, 67, 54)')
+
+
   });
 
 })  

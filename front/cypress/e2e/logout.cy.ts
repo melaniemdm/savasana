@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-describe('lougout',()=>{
-    it('logout',()=>{
+describe('lougout', () => {
+  it('logout', () => {
     cy.visit('/login')
 
     cy.intercept('POST', '/api/auth/login', {
@@ -27,8 +27,8 @@ describe('lougout',()=>{
     cy.url().should('include', '/sessions')
 
     cy.contains('Logout').click
-  cy.visit('/sessions')
-  //retourne sur login
-  cy.url().should('include', '/login')
-})
+    cy.visit('/sessions')
+    //retourne sur login
+    cy.url().should('include', '/login')
+  })
 })
