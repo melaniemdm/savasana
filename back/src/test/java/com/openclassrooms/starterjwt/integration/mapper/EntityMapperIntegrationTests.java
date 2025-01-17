@@ -5,10 +5,16 @@ import com.openclassrooms.starterjwt.mapper.SessionMapperImpl;
 import com.openclassrooms.starterjwt.models.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
+@ActiveProfiles("test")
 public class EntityMapperIntegrationTests {
     private SessionMapperImpl sessionMapper;
 
@@ -19,19 +25,32 @@ public class EntityMapperIntegrationTests {
 
     @Test
     public void testToEntity_NullList() {
-        List<Session> result = sessionMapper.toEntity((List<SessionDto>) null);
+        // Arrange
+        List<SessionDto> inputList = null;
+
+        // Act
+        List<Session> result = sessionMapper.toEntity(inputList);
+
+        // Assert
         assertNull(result, "toEntity should return null when input is null");
     }
 
     @Test
     public void testToEntity_EmptyList() {
-        List<Session> result = sessionMapper.toEntity(new ArrayList<>());
+        // Arrange
+        List<SessionDto> inputList = new ArrayList<>();
+
+        // Act
+        List<Session> result = sessionMapper.toEntity(inputList);
+
+        // Assert
         assertNotNull(result, "toEntity should not return null when input is an empty list");
         assertTrue(result.isEmpty(), "toEntity should return an empty list when input is empty");
     }
 
     @Test
     public void testToEntity_ValidList() {
+        // Arrange
         List<SessionDto> dtoList = new ArrayList<>();
         SessionDto sessionDto1 = new SessionDto();
         sessionDto1.setId(1L);
@@ -44,8 +63,10 @@ public class EntityMapperIntegrationTests {
         dtoList.add(sessionDto1);
         dtoList.add(sessionDto2);
 
+        // Act
         List<Session> entityList = sessionMapper.toEntity(dtoList);
 
+        // Assert
         assertNotNull(entityList, "toEntity should not return null for a valid input list");
         assertEquals(2, entityList.size(), "toEntity should map the correct number of items");
         assertEquals(sessionDto1.getId(), entityList.get(0).getId(), "ID should match for the first item");
@@ -55,13 +76,20 @@ public class EntityMapperIntegrationTests {
 
     @Test
     public void testToDto_EmptyList() {
-        List<SessionDto> result = sessionMapper.toDto(new ArrayList<>());
+        // Arrange
+        List<Session> inputList = new ArrayList<>();
+
+        // Act
+        List<SessionDto> result = sessionMapper.toDto(inputList);
+
+        // Assert
         assertNotNull(result, "toDto should not return null when input is an empty list");
         assertTrue(result.isEmpty(), "toDto should return an empty list when input is empty");
     }
 
     @Test
     public void testToDto_ValidList() {
+        // Arrange
         List<Session> entityList = new ArrayList<>();
         Session session1 = new Session();
         session1.setId(1L);
@@ -74,8 +102,10 @@ public class EntityMapperIntegrationTests {
         entityList.add(session1);
         entityList.add(session2);
 
+        // Act
         List<SessionDto> dtoList = sessionMapper.toDto(entityList);
 
+        // Assert
         assertNotNull(dtoList, "toDto should not return null for a valid input list");
         assertEquals(2, dtoList.size(), "toDto should map the correct number of items");
         assertEquals(session1.getId(), dtoList.get(0).getId(), "ID should match for the first item");

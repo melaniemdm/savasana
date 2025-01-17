@@ -4,11 +4,16 @@ import com.openclassrooms.starterjwt.mapper.UserMapperImpl;
 import com.openclassrooms.starterjwt.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@ActiveProfiles("test")
 public class UserMapperIntegrationTests {
 
     private UserMapperImpl userMapper;
@@ -20,12 +25,19 @@ public class UserMapperIntegrationTests {
 
     @Test
     public void testToEntity_NullDto() {
-        User result = userMapper.toEntity((UserDto) null);
+        // Arrange
+        UserDto input = null;
+
+        // Act
+        User result = userMapper.toEntity(input);
+
+        // Assert
         assertNull(result, "toEntity should return null when the input DTO is null");
     }
 
     @Test
     public void testToEntity_ValidDto() {
+        // Arrange
         UserDto dto = new UserDto();
         dto.setId(1L);
         dto.setEmail("test@example.com");
@@ -36,8 +48,10 @@ public class UserMapperIntegrationTests {
         dto.setCreatedAt(LocalDateTime.now());
         dto.setUpdatedAt(LocalDateTime.now());
 
+        // Act
         User result = userMapper.toEntity(dto);
 
+        // Assert
         assertNotNull(result, "toEntity should not return null for a valid DTO");
         assertEquals(dto.getId(), result.getId(), "ID should match");
         assertEquals(dto.getEmail(), result.getEmail(), "Email should match");
@@ -51,12 +65,19 @@ public class UserMapperIntegrationTests {
 
     @Test
     public void testToDto_NullEntity() {
-        UserDto result = userMapper.toDto((User) null);
+        // Arrange
+        User input = null;
+
+        // Act
+        UserDto result = userMapper.toDto(input);
+
+        // Assert
         assertNull(result, "toDto should return null when the input entity is null");
     }
 
     @Test
     public void testToDto_ValidEntity() {
+        // Arrange
         User user = User.builder()
                 .id(1L)
                 .email("test@example.com")
@@ -68,8 +89,10 @@ public class UserMapperIntegrationTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        // Act
         UserDto result = userMapper.toDto(user);
 
+        // Assert
         assertNotNull(result, "toDto should not return null for a valid entity");
         assertEquals(user.getId(), result.getId(), "ID should match");
         assertEquals(user.getEmail(), result.getEmail(), "Email should match");
@@ -83,14 +106,26 @@ public class UserMapperIntegrationTests {
 
     @Test
     public void testToEntity_NullList() {
-        List<User> result = userMapper.toEntity((List<UserDto>) null);
+        // Arrange
+        List<UserDto> inputList = null;
+
+        // Act
+        List<User> result = userMapper.toEntity(inputList);
+
+        // Assert
         assertNull(result, "toEntity should return null when the input list is null");
     }
 
 
     @Test
     public void testToEntity_EmptyList() {
-        List<User> result = userMapper.toEntity(new ArrayList<>());
+        // Arrange
+        List<UserDto> inputList = new ArrayList<>();
+
+        // Act
+        List<User> result = userMapper.toEntity(inputList);
+
+        // Assert
         assertNotNull(result, "toEntity should not return null for an empty list");
         assertTrue(result.isEmpty(), "toEntity should return an empty list for an empty input");
     }
@@ -99,22 +134,34 @@ public class UserMapperIntegrationTests {
 
     @Test
     public void testToDto_EmptyList() {
-        List<UserDto> result = userMapper.toDto(new ArrayList<>());
+        // Arrange
+        List<User> inputList = new ArrayList<>();
+
+        // Act
+        List<UserDto> result = userMapper.toDto(inputList);
+
+        // Assert
         assertNotNull(result, "toDto should not return null for an empty list");
         assertTrue(result.isEmpty(), "toDto should return an empty list for an empty input");
     }
 
     @Test
     public void testToDto_NullList() {
-        List<UserDto> result = userMapper.toDto((List<User>) null);
+        // Arrange
+        List<User> inputList = null;
+
+        // Act
+        List<UserDto> result = userMapper.toDto(inputList);
+
+        // Assert
         assertNull(result, "toDto should return null when the input list is null");
     }
 
     @Test
     public void testToEntity_ListWithValidDtos() {
+        // Arrange
         List<UserDto> dtoList = new ArrayList<>();
 
-        // DTO 1 avec un password valide
         UserDto dto1 = new UserDto();
         dto1.setId(1L);
         dto1.setEmail("test1@example.com");
@@ -122,7 +169,6 @@ public class UserMapperIntegrationTests {
         dto1.setLastName("Doe");
         dto1.setPassword("password123"); // Ajout du mot de passe
 
-        // DTO 2 avec un password valide
         UserDto dto2 = new UserDto();
         dto2.setId(2L);
         dto2.setEmail("test2@example.com");
@@ -133,10 +179,10 @@ public class UserMapperIntegrationTests {
         dtoList.add(dto1);
         dtoList.add(dto2);
 
-        // Conversion avec le mapper
+        // Act
         List<User> result = userMapper.toEntity(dtoList);
 
-        // Assertions
+        // Assert
         assertNotNull(result, "toEntity should not return null for a valid input list");
         assertEquals(2, result.size(), "toEntity should map the correct number of items");
         assertEquals(dto1.getEmail(), result.get(0).getEmail(), "Email of first item should match");
@@ -146,7 +192,7 @@ public class UserMapperIntegrationTests {
     }
     @Test
     public void testToDto_ListWithValidEntities() {
-        // Préparation de la liste d'entités User
+        // Arrange
         List<User> entityList = new ArrayList<>();
 
         User user1 = User.builder()
@@ -174,14 +220,14 @@ public class UserMapperIntegrationTests {
         entityList.add(user1);
         entityList.add(user2);
 
-        // Appel de la méthode toDto pour convertir la liste
+        // Act
         List<UserDto> result = userMapper.toDto(entityList);
 
-        // Assertions
+        // Assert
         assertNotNull(result, "toDto should not return null for a valid input list");
         assertEquals(2, result.size(), "toDto should map the correct number of items");
 
-        // Validation du mapping pour le premier élément
+
         UserDto dto1 = result.get(0);
         assertEquals(user1.getId(), dto1.getId(), "ID of the first item should match");
         assertEquals(user1.getEmail(), dto1.getEmail(), "Email of the first item should match");
@@ -190,7 +236,6 @@ public class UserMapperIntegrationTests {
         assertEquals(user1.getPassword(), dto1.getPassword(), "Password of the first item should match");
         assertEquals(user1.isAdmin(), dto1.isAdmin(), "Admin status of the first item should match");
 
-        // Validation du mapping pour le second élément
         UserDto dto2 = result.get(1);
         assertEquals(user2.getId(), dto2.getId(), "ID of the second item should match");
         assertEquals(user2.getEmail(), dto2.getEmail(), "Email of the second item should match");

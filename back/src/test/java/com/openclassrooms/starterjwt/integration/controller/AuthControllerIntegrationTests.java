@@ -15,10 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
+@ActiveProfiles("test")
 public class AuthControllerIntegrationTests {
 
     @Autowired
@@ -44,12 +48,14 @@ public class AuthControllerIntegrationTests {
 
     @Test
     public void testRegisterUser_Success() throws Exception {
+        //Arrange
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setEmail("newuser@example.com");
         signupRequest.setPassword("password");
         signupRequest.setFirstName("New");
         signupRequest.setLastName("User");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/register")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(signupRequest)))
@@ -59,12 +65,14 @@ public class AuthControllerIntegrationTests {
 
     @Test
     public void testRegisterUser_EmailAlreadyTaken() throws Exception {
+        //Arrange
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setEmail("test@example.com"); // Email déjà utilisé
         signupRequest.setPassword("password");
         signupRequest.setFirstName("New");
         signupRequest.setLastName("User");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/register")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(signupRequest)))
@@ -74,10 +82,12 @@ public class AuthControllerIntegrationTests {
 
     @Test
     public void testAuthenticateUser_Success() throws Exception {
+        //Arrange
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@example.com");
         loginRequest.setPassword("password");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/login")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(loginRequest)))
@@ -90,10 +100,12 @@ public class AuthControllerIntegrationTests {
 
     @Test
     public void testAuthenticateUser_InvalidCredentials() throws Exception {
+        //Arrange
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@example.com");
         loginRequest.setPassword("wrongpassword");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/login")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(loginRequest)))
@@ -102,12 +114,14 @@ public class AuthControllerIntegrationTests {
 
     @Test
     public void testRegisterUser_FirstNameTooLong() throws Exception {
+        //Arrange
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setEmail("newuser@example.com");
         signupRequest.setPassword("password");
         signupRequest.setFirstName("ThisIsAVeryLongFirstNameThatExceedsTheAllowedLength");
         signupRequest.setLastName("User");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/register")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(signupRequest)))
@@ -115,12 +129,14 @@ public class AuthControllerIntegrationTests {
     }
 @Test
 public void testRegisterUser_FirstNameTooShort() throws Exception {
-    SignupRequest signupRequest = new SignupRequest();
-    signupRequest.setEmail("newuser@example.com");
-    signupRequest.setPassword("password");
-    signupRequest.setFirstName("A");
-    signupRequest.setLastName("User");
+        // Arrange
+        SignupRequest signupRequest = new SignupRequest();
+        signupRequest.setEmail("newuser@example.com");
+        signupRequest.setPassword("password");
+        signupRequest.setFirstName("A");
+        signupRequest.setLastName("User");
 
+    // Act et Assert
     mockMvc.perform(post("/api/auth/register")
                     .contentType("application/json")
                     .content(objectMapper.writeValueAsString(signupRequest)))
@@ -129,12 +145,14 @@ public void testRegisterUser_FirstNameTooShort() throws Exception {
 }
 @Test
 public void testRegisterUser_UserNameTooLong() throws Exception {
-    SignupRequest signupRequest = new SignupRequest();
-    signupRequest.setEmail("newuser@example.com");
-    signupRequest.setPassword("password");
-    signupRequest.setFirstName("toto");
-    signupRequest.setLastName("ThisIsAVeryLongLastNameThatExceedsTheAllowedLength");
+        //Arrange
+        SignupRequest signupRequest = new SignupRequest();
+        signupRequest.setEmail("newuser@example.com");
+        signupRequest.setPassword("password");
+        signupRequest.setFirstName("toto");
+        signupRequest.setLastName("ThisIsAVeryLongLastNameThatExceedsTheAllowedLength");
 
+    // Act et Assert
     mockMvc.perform(post("/api/auth/register")
                     .contentType("application/json")
                     .content(objectMapper.writeValueAsString(signupRequest)))
@@ -142,12 +160,14 @@ public void testRegisterUser_UserNameTooLong() throws Exception {
 }
     @Test
     public void testRegisterUser_UserNameTooShort() throws Exception {
+        //Arrange
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setEmail("newuser@example.com");
         signupRequest.setPassword("password");
         signupRequest.setFirstName("toto");
         signupRequest.setLastName("A");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/register")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(signupRequest)))
@@ -155,12 +175,14 @@ public void testRegisterUser_UserNameTooLong() throws Exception {
     }
     @Test
     public void testRegisterUser_PasswordTooShort() throws Exception {
+        //Arrange
         SignupRequest signupRequest = new SignupRequest();
         signupRequest.setEmail("newuser@example.com");
         signupRequest.setPassword("123");
         signupRequest.setFirstName("New");
         signupRequest.setLastName("User");
 
+        // Act et Assert
         mockMvc.perform(post("/api/auth/register")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(signupRequest)))
