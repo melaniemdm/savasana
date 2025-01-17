@@ -6,6 +6,7 @@
 /out-tsc
 /bazel-out
 .nyc_output
+**/.nyc_output/**
 .angular
 coverage
 instrumented
