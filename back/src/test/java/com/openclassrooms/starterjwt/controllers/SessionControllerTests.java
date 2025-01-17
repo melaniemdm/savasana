@@ -13,20 +13,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
+
 class SessionControllerTests {
 
-    @Mock
     private SessionService sessionService;
-
-    @Mock
     private SessionMapper sessionMapper;
-
-    @InjectMocks
     private SessionController sessionController;
 
     private Session session;
@@ -34,8 +31,12 @@ class SessionControllerTests {
 
     @BeforeEach
     void setUp() {
-        // Initialisation des mocks avec Mockito
-        MockitoAnnotations.openMocks(this);  // Cela initialise les mocks
+        // Initialisation des mocks
+        sessionService = mock(SessionService.class);
+        sessionMapper = mock(SessionMapper.class);
+
+        // Initialisation explicite du contrôleur avec les mocks
+        sessionController = new SessionController(sessionService, sessionMapper);
 
         // Création d'un exemple de session pour les tests
         session = new Session();

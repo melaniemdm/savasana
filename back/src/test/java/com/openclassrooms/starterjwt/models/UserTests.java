@@ -28,21 +28,34 @@ class UserTests {
 
     @Test
     void testUserCreation() {
-        // Tester que l'instance a été correctement créée
-        assertNotNull(user);
-        assertEquals(1L, user.getId());
-        assertEquals("testuser@example.com", user.getEmail());
-        assertEquals("Doe", user.getLastName());
-        assertEquals("John", user.getFirstName());
-        assertEquals("encodedPassword", user.getPassword());
-        assertFalse(user.isAdmin());
-        assertNotNull(user.getCreatedAt());
-        assertNotNull(user.getUpdatedAt());
+        // Arrange
+        User expectedUser = user;
+
+        // Act
+        Long id = expectedUser.getId();
+        String email = expectedUser.getEmail();
+        String lastName = expectedUser.getLastName();
+        String firstName = expectedUser.getFirstName();
+        String password = expectedUser.getPassword();
+        boolean isAdmin = expectedUser.isAdmin();
+        LocalDateTime createdAt = expectedUser.getCreatedAt();
+        LocalDateTime updatedAt = expectedUser.getUpdatedAt();
+
+        // Assert
+        assertNotNull(expectedUser);
+        assertEquals(1L, id);
+        assertEquals("testuser@example.com", email);
+        assertEquals("Doe", lastName);
+        assertEquals("John", firstName);
+        assertEquals("encodedPassword", password);
+        assertFalse(isAdmin);
+        assertNotNull(createdAt);
+        assertNotNull(updatedAt);
     }
 
     @Test
     void testUserEquality() {
-        // Tester l'égalité de deux utilisateurs avec le même ID
+        // Arrange
         User sameUser = User.builder()
                 .id(1L)
                 .email("testuser@example.com")
@@ -54,10 +67,6 @@ class UserTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        assertEquals(user, sameUser);
-        assertEquals(user.hashCode(), sameUser.hashCode());
-
-        // Tester l'égalité avec un utilisateur différent
         User differentUser = User.builder()
                 .id(2L)
                 .email("anotheruser@example.com")
@@ -69,30 +78,39 @@ class UserTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        // Act et Assert
+        assertEquals(user, sameUser);
+        assertEquals(user.hashCode(), sameUser.hashCode());
         assertNotEquals(user, differentUser);
         assertNotEquals(user.hashCode(), differentUser.hashCode());
     }
 
     @Test
     void testUserFieldValidation() {
-        // Tester les contraintes @Size et @Email
-        assertNotNull(user.getEmail());
-        assertTrue(user.getEmail().length() <= 50);
-        assertTrue(user.getEmail().contains("@"));
+        // Arrange
+        String email = user.getEmail();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+        String password = user.getPassword();
 
-        assertNotNull(user.getFirstName());
-        assertTrue(user.getFirstName().length() <= 20);
+        // Act & Assert
+        assertNotNull(email);
+        assertTrue(email.length() <= 50);
+        assertTrue(email.contains("@"));
 
-        assertNotNull(user.getLastName());
-        assertTrue(user.getLastName().length() <= 20);
+        assertNotNull(firstName);
+        assertTrue(firstName.length() <= 20);
 
-        assertNotNull(user.getPassword());
-        assertTrue(user.getPassword().length() <= 120);
+        assertNotNull(lastName);
+        assertTrue(lastName.length() <= 20);
+
+        assertNotNull(password);
+        assertTrue(password.length() <= 120);
     }
 
     @Test
     void testUserNullFields() {
-        // Tester un utilisateur avec des champs obligatoires nuls
+        // Arrange, Act et Assert
         assertThrows(NullPointerException.class, () -> {
             User nullFieldUser = User.builder()
                     .email(null) // email est non-nul, donc une exception devrait être levée ici
@@ -136,19 +154,24 @@ class UserTests {
 
     @Test
     void testUserCreatedAtUpdatedAt() {
-        // Tester les timestamps `createdAt` et `updatedAt`
+        // Arrange
         LocalDateTime createdAt = user.getCreatedAt();
         LocalDateTime updatedAt = user.getUpdatedAt();
 
+        // Act & Assert
         assertNotNull(createdAt);
         assertNotNull(updatedAt);
     }
     @Test
     void testUserToString() {
-        // Tester la méthode toString()
-        String result = user.toString();
+        // Arrange
+        String result;
 
-        // Vérifier que les éléments attendus sont présents dans la chaîne
+        // Act
+        result = user.toString();
+
+        // Assert
+        assertNotNull(result);
         assertTrue(result.contains("id=1"));
         assertTrue(result.contains("email=testuser@example.com"));
         assertTrue(result.contains("firstName=John"));

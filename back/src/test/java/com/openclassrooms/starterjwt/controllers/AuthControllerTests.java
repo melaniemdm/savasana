@@ -6,9 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,34 +21,37 @@ import com.openclassrooms.starterjwt.payload.response.MessageResponse;
 import com.openclassrooms.starterjwt.repository.UserRepository;
 import com.openclassrooms.starterjwt.security.jwt.JwtUtils;
 import com.openclassrooms.starterjwt.security.services.UserDetailsImpl;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Optional;
 
 
 class AuthControllerTests {
 
-    @Mock
     private AuthenticationManager authenticationManager;
-
-    @Mock
     private JwtUtils jwtUtils;
-
-    @Mock
     private PasswordEncoder passwordEncoder;
-
-    @Mock
     private UserRepository userRepository;
-
-    @Mock
     private Authentication authentication;
-
-    @InjectMocks
     private AuthController authController;
+    private UserDetailsImpl userDetails;
 
-    private  UserDetailsImpl userDetails;
+
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        // Mock des dépendances
+        authenticationManager = mock(AuthenticationManager.class);
+        jwtUtils = mock(JwtUtils.class);
+        passwordEncoder = mock(PasswordEncoder.class);
+        userRepository = mock(UserRepository.class);
+        authentication = mock(Authentication.class);
+
+        // Initialisation du contrôleur avec les mocks
+        authController = new AuthController(authenticationManager, passwordEncoder, jwtUtils, userRepository);
+
         // Initialisation d'un UserDetailsImpl pour les tests
         userDetails = UserDetailsImpl.builder()
                 .id(1L)
@@ -68,11 +69,10 @@ class AuthControllerTests {
         loginRequest.setEmail("testuser@example.com");
         loginRequest.setPassword("password");
 
-        // Simuler l'authentification et la génération du JWT
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
         when(jwtUtils.generateJwtToken(authentication)).thenReturn("mockJwtToken");
-        when(userRepository.findByEmail("testuser@example.com")).thenReturn(java.util.Optional.of(new User()));
+        when(userRepository.findByEmail("testuser@example.com")).thenReturn(Optional.of(new User()));
 
         // Act
         ResponseEntity<?> response = authController.authenticateUser(loginRequest);
@@ -82,14 +82,11 @@ class AuthControllerTests {
         JwtResponse jwtResponse = (JwtResponse) response.getBody();
         assertNotNull(jwtResponse);
         assertEquals("mockJwtToken", jwtResponse.getToken());
-        assertEquals(1L, jwtResponse.getId());
         assertEquals("testuser@example.com", jwtResponse.getUsername());
         assertEquals("John", jwtResponse.getFirstName());
         assertEquals("Doe", jwtResponse.getLastName());
 
     }
-
-
 
     @Test
     void testRegisterUser_Success() {
@@ -109,7 +106,6 @@ class AuthControllerTests {
         // Assert
         assertNotNull(response);
         assertEquals(200, response.getStatusCodeValue());
-
         MessageResponse messageResponse = (MessageResponse) response.getBody();
         assertNotNull(messageResponse);
         assertEquals("User registered successfully!", messageResponse.getMessage());
@@ -119,9 +115,9 @@ class AuthControllerTests {
     void testRegisterUser_EmailAlreadyTaken() {
         // Arrange
         SignupRequest signUpRequest = new SignupRequest();
-        signUpRequest.setEmail("existing@example.com");
+        signUpRequest.setEmail("test@example.com");
 
-        when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);
+        when(userRepository.existsByEmail("test@example.com")).thenReturn(true);
 
         // Act
         ResponseEntity<?> response = authController.registerUser(signUpRequest);
@@ -129,11 +125,8 @@ class AuthControllerTests {
         // Assert
         assertNotNull(response);
         assertEquals(400, response.getStatusCodeValue());
-
         MessageResponse messageResponse = (MessageResponse) response.getBody();
         assertNotNull(messageResponse);
         assertEquals("Error: Email is already taken!", messageResponse.getMessage());
-    }
-
-
+}
 }

@@ -56,7 +56,7 @@ public class AuthEntryPointJwtTests {
         String jsonOutput = outputStream.toString();
         Map<String, Object> responseBody = mapper.readValue(jsonOutput, Map.class);
 
-        // Assertions
+        // Assert
         assertEquals(401, responseBody.get("status"));
         assertEquals("Unauthorized", responseBody.get("error"));
         assertEquals("Unauthorized access", responseBody.get("message"));

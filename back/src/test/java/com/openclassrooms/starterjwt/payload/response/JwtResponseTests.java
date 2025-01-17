@@ -24,55 +24,108 @@ public class JwtResponseTests {
 
     @Test
     void testJwtResponseConstructor() {
-        // Vérification que le constructeur initialise correctement l'objet
-        assertNotNull(jwtResponse);
-        assertEquals("testToken", jwtResponse.getToken());
-        assertEquals(1L, jwtResponse.getId());
-        assertEquals("testuser@example.com", jwtResponse.getUsername());
-        assertEquals("John", jwtResponse.getFirstName());
-        assertEquals("Doe", jwtResponse.getLastName());
-        assertTrue(jwtResponse.getAdmin());
+        // Arrange
+        String expectedToken = "testToken";
+        Long expectedId = 1L;
+        String expectedUsername = "testuser@example.com";
+        String expectedFirstName = "John";
+        String expectedLastName = "Doe";
+        boolean expectedAdmin = true;
+
+        // Act
+        JwtResponse result = jwtResponse;
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedToken, result.getToken());
+        assertEquals(expectedId, result.getId());
+        assertEquals(expectedUsername, result.getUsername());
+        assertEquals(expectedFirstName, result.getFirstName());
+        assertEquals(expectedLastName, result.getLastName());
+        assertTrue(result.getAdmin());
     }
 
     @Test
     void testGetToken() {
-        // Vérification du getter pour 'token'
-        assertEquals("testToken", jwtResponse.getToken());
+        // Arrange
+        String expectedToken = "testToken";
+
+        // Act
+        String result = jwtResponse.getToken();
+
+        // Assert
+        assertEquals(expectedToken, result);
     }
 
     @Test
     void testGetType() {
-        // Vérification que le type est bien "Bearer" par défaut
-        assertEquals("Bearer", jwtResponse.getType());
+        // Arrange
+        String expectedType = "Bearer";
+
+        // Act
+        String result = jwtResponse.getType();
+
+        // Assert
+        assertEquals(expectedType, result);
     }
 
     @Test
     void testGetId() {
-        // Vérification du getter pour 'id'
-        assertEquals(1L, jwtResponse.getId());
+        // Arrange
+        Long expectedId = 1L;
+
+        // Act
+        Long result = jwtResponse.getId();
+
+        // Assert
+        assertEquals(expectedId, result);
     }
 
     @Test
     void testGetUsername() {
-        // Vérification du getter pour 'username'
-        assertEquals("testuser@example.com", jwtResponse.getUsername());
+        // Arrange
+        String expectedUsername = "testuser@example.com";
+
+        // Act
+        String result = jwtResponse.getUsername();
+
+        // Assert
+        assertEquals(expectedUsername, result);
     }
 
     @Test
     void testGetFirstName() {
-        // Vérification du getter pour 'firstName'
-        assertEquals("John", jwtResponse.getFirstName());
+        // Arrange
+        String expectedFirstName = "John";
+
+        // Act
+        String result = jwtResponse.getFirstName();
+
+        // Assert
+        assertEquals(expectedFirstName, result);
     }
 
     @Test
     void testGetLastName() {
-        // Vérification du getter pour 'lastName'
-        assertEquals("Doe", jwtResponse.getLastName());
+        // Arrange
+        String expectedLastName = "Doe";
+
+        // Act
+        String result = jwtResponse.getLastName();
+
+        // Assert
+        assertEquals(expectedLastName, result);
     }
 
     @Test
     void testGetAdmin() {
-        // Vérification du getter pour 'admin'
-        assertTrue(jwtResponse.getAdmin());
+        // Arrange
+        boolean expectedAdmin = true;
+
+        // Act
+        boolean result = jwtResponse.getAdmin();
+
+        // Assert
+        assertTrue(result);
     }
 }

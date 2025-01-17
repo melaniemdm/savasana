@@ -66,50 +66,70 @@ public class SignupRequestTests {
     @Test
     void testEmailNotBlank() {
         // Arrange
-        signupRequest.setEmail("testuser@example.com");
+        String email = "testuser@example.com";
+        signupRequest.setEmail(email);
+
+        // Act
+        String result = signupRequest.getEmail();
 
         // Assert
-        assertNotNull(signupRequest.getEmail());
-        assertTrue(signupRequest.getEmail().length() > 0, "Email should not be blank");
+        assertNotNull(result, "Email should not be null");
+        assertTrue(result.length() > 0, "Email should not be blank");
     }
 
     @Test
     void testFirstNameNotBlank() {
         // Arrange
-        signupRequest.setFirstName("John");
+        String firstName = "John";
+        signupRequest.setFirstName(firstName);
+
+        // Act
+        String result = signupRequest.getFirstName();
 
         // Assert
-        assertNotNull(signupRequest.getFirstName());
-        assertTrue(signupRequest.getFirstName().length() >= 3, "First name should have at least 3 characters");
+        assertNotNull(result, "First name should not be null");
+        assertTrue(result.length() >= 3, "First name should have at least 3 characters");
     }
 
     @Test
     void testLastNameNotBlank() {
         // Arrange
-        signupRequest.setLastName("Doe");
+        String lastName = "Doe";
+        signupRequest.setLastName(lastName);
+
+        // Act
+        String result = signupRequest.getLastName();
 
         // Assert
-        assertNotNull(signupRequest.getLastName());
-        assertTrue(signupRequest.getLastName().length() >= 3, "Last name should have at least 3 characters");
+        assertNotNull(result, "Last name should not be null");
+        assertTrue(result.length() >= 3, "Last name should have at least 3 characters");
     }
 
     @Test
     void testPasswordNotBlank() {
         // Arrange
-        signupRequest.setPassword("securePassword");
+        String password = "securePassword";
+        signupRequest.setPassword(password);
+
+        // Act
+        String result = signupRequest.getPassword();
 
         // Assert
-        assertNotNull(signupRequest.getPassword());
-        assertTrue(signupRequest.getPassword().length() >= 6, "Password should have at least 6 characters");
+        assertNotNull(result, "Password should not be null");
+        assertTrue(result.length() >= 6, "Password should have at least 6 characters");
     }
 
     @Test
     void testEmailFormat() {
         // Arrange
-        signupRequest.setEmail("invalidemail.com");
+        String email = "invalidemail.com";
+        signupRequest.setEmail(email);
+
+        // Act
+        String result = signupRequest.getEmail();
 
         // Assert
-        assertFalse(signupRequest.getEmail().contains("@"), "Email should contain '@' symbol");
+        assertFalse(result.contains("@"), "Email should contain '@' symbol");
     }
 
     @Test
@@ -144,8 +164,12 @@ public class SignupRequestTests {
         signupRequest2.setLastName("Doe");
         signupRequest2.setPassword("securePassword");
 
-        // Act & Assert
-        assertEquals(signupRequest, signupRequest2); // Test égalité
-        assertEquals(signupRequest.hashCode(), signupRequest2.hashCode()); // Test hashCode
+        // Act
+        boolean isEqual = signupRequest.equals(signupRequest2);
+        boolean hashCodesEqual = signupRequest.hashCode() == signupRequest2.hashCode();
+
+        // Assert
+        assertTrue(isEqual, "SignupRequests should be equal");
+        assertTrue(hashCodesEqual, "Hash codes should be equal");
     }
 }

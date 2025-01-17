@@ -14,34 +14,32 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Optional;
 
 class UserDetailsServiceImplTests {
-
-    @Mock
     private UserRepository userRepository;
-
-    @InjectMocks
     private UserDetailsServiceImpl userDetailsService;
-
     private User user;
 
     @BeforeEach
     void setUp() {
+        // Initialisation des mocks
+        userRepository = mock(UserRepository.class);
+
+        // Initialisation du service avec le mock
+        userDetailsService = new UserDetailsServiceImpl(userRepository);
+
         // Création de l'utilisateur pour les tests
         user = new User("testuser@example.com", "Doe", "John", "encodedPassword", false);
         user.setId(1L);
-
-        // Initialisation des mocks
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testLoadUserByUsername_Success() {
-        // Arrange : Simuler le comportement de userRepository pour renvoyer un utilisateur
+        // Arrange
         when(userRepository.findByEmail("testuser@example.com")).thenReturn(Optional.of(user));
 
-        // Act : Appel de la méthode
+        // Act
         UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername("testuser@example.com");
 
-        // Assert : Vérification que l'utilisateur est bien retourné et que les propriétés sont correctes
+        // Assert
         assertNotNull(userDetails);
         assertEquals("testuser@example.com", userDetails.getUsername());
         assertEquals("John", userDetails.getFirstName());
@@ -51,10 +49,11 @@ class UserDetailsServiceImplTests {
 
     @Test
     void testLoadUserByUsername_UserNotFound() {
-        // Arrange : Simuler le comportement de userRepository pour renvoyer un utilisateur inexistant
+        // Arrange
         when(userRepository.findByEmail("nonexistentuser@example.com")).thenReturn(Optional.empty());
 
-        // Act & Assert : Vérification qu'une exception UsernameNotFoundException est lancée
-        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("nonexistentuser@example.com"));
+        // Act et Assert
+        assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername("nonexistentuser@example.com"));
     }
 }

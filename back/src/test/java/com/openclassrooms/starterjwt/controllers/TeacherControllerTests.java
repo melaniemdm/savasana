@@ -13,20 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
 
+
 class TeacherControllerTests {
-
-
-    @Mock
     private TeacherService teacherService;
-
-    @Mock
     private TeacherMapper teacherMapper;
-
-    @InjectMocks
     private TeacherController teacherController;
 
     private Teacher teacher;
@@ -35,18 +30,23 @@ class TeacherControllerTests {
     @BeforeEach
     void setUp() {
         // Initialisation des mocks
-        MockitoAnnotations.openMocks(this);
+        teacherService = mock(TeacherService.class);
+        teacherMapper = mock(TeacherMapper.class);
+
+        // Initialisation explicite du contrôleur avec les mocks
+        teacherController = new TeacherController(teacherService, teacherMapper);
 
         // Initialisation des objets
         teacher = new Teacher();
         teacher.setId(1L);
-        teacher.setFirstName("John Doe");
-        teacher.setLastName("John Doe");
+        teacher.setFirstName("John");
+        teacher.setLastName("Doe");
 
         teacherDto = new TeacherDto();
         teacherDto.setId(1L);
-        teacherDto.setFirstName("John Doe");
-        teacherDto.setLastName("John Doe");
+        teacherDto.setFirstName("John");
+        teacherDto.setLastName("Doe");
+
         // Mocks pour les appels de service et de mapper
         when(teacherService.findById(1L)).thenReturn(teacher);
         when(teacherService.findAll()).thenReturn(Arrays.asList(teacher));

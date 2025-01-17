@@ -117,23 +117,25 @@ public class SessionServicesTests {
         Long sessionId = 1L;
         Long userId = 2L;
 
+        // Création d'une session et d'un utilisateur simulés
         Session session = new Session();
         session.setId(sessionId);
-        session.setUsers(new ArrayList<>()); // Liste modifiable
+        session.setUsers(new ArrayList<>());
 
         User user = new User();
         user.setId(userId);
 
+        // Simule les comportements des dépôts
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(sessionRepository.save(any(Session.class))).thenReturn(session);
 
-        // Act
+        // Act: Appel la méthode pour ajouter l'utilisateur à la session
         assertDoesNotThrow(() -> sessionService.participate(sessionId, userId));
 
-        // Assert
-        assertEquals(1, session.getUsers().size());
-        assertTrue(session.getUsers().contains(user));
+        // Assert: Vérifier que l'utilisateur a été ajouté à la session
+        assertEquals(1, session.getUsers().size(), "La session doit contenir un utilisateur");
+        assertTrue(session.getUsers().contains(user), "La session doit contenir l'utilisateur ajouté");
         verify(sessionRepository, times(1)).save(session);
     }
     @Test

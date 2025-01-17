@@ -17,55 +17,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
+
 class UserControllerTests {
-
-    @Mock
     private UserService userService;
-
-    @Mock
     private UserMapper userMapper;
-
-    @Mock
-    private Authentication authentication;  // Correctement mocké Authentication
-
-    @InjectMocks
+    private Authentication authentication;
     private UserController userController;
 
     private User user;
     private UserDto userDto;
-    private UserDetails userDetails;  // Correctement défini pour les tests
+    private UserDetails userDetails;
 
     @BeforeEach
     void setUp() {
         // Initialisation des mocks
-        MockitoAnnotations.openMocks(this);
+        userService = mock(UserService.class);
+        userMapper = mock(UserMapper.class);
+        authentication = mock(Authentication.class);
 
-        // Initialisation des objets
+        // Initialisation explicite du contrôleur avec les mocks
+        userController = new UserController(userService, userMapper);
+
+        // Initialisation des objets pour les tests
         user = new User();
         user.setId(1L);
         user.setEmail("john.doe@example.com");
-        user.setFirstName("John Doe");
-        user.setLastName("John Doe");
+        user.setFirstName("John");
+        user.setLastName("Doe");
 
         userDto = new UserDto();
         userDto.setId(1L);
         userDto.setEmail("john.doe@example.com");
-        userDto.setFirstName("John Doe");
-        userDto.setLastName("John Doe");
+        userDto.setFirstName("John");
+        userDto.setLastName("Doe");
 
         // Simuler le comportement de userService et userMapper
         when(userService.findById(1L)).thenReturn(user);
         when(userMapper.toDto(user)).thenReturn(userDto);
         when(userService.findById(999L)).thenReturn(null);
 
-        // Simuler un objet UserDetails pour l'utilisateur authentifié
-        userDetails = mock(UserDetails.class);  // Création d'un mock UserDetails
-        when(userDetails.getUsername()).thenReturn("john.doe@example.com");  // Simuler le username
-        when(authentication.getPrincipal()).thenReturn(userDetails);  // Lier authentication au mock UserDetails
-        SecurityContextHolder.getContext().setAuthentication(authentication);  // Configuration du SecurityContext
+        // Simuler un utilisateur authentifié
+        userDetails = mock(UserDetails.class);
+        when(userDetails.getUsername()).thenReturn("john.doe@example.com");
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Test

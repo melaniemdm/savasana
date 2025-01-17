@@ -24,18 +24,21 @@ class TeacherTests {
 
     @Test
     void testTeacherCreation() {
-        // Tester que l'instance a été correctement créée
-        assertNotNull(teacher);
-        assertEquals(1L, teacher.getId());
-        assertEquals("John", teacher.getFirstName());
-        assertEquals("Doe", teacher.getLastName());
-        assertNotNull(teacher.getCreatedAt());
-        assertNotNull(teacher.getUpdatedAt());
+        // Arrange
+        Teacher expectedTeacher = teacher;
+
+        // Act & Assert
+        assertNotNull(expectedTeacher);
+        assertEquals(1L, expectedTeacher.getId());
+        assertEquals("John", expectedTeacher.getFirstName());
+        assertEquals("Doe", expectedTeacher.getLastName());
+        assertNotNull(expectedTeacher.getCreatedAt());
+        assertNotNull(expectedTeacher.getUpdatedAt());
     }
 
     @Test
     void testTeacherEquality() {
-        // Tester l'égalité de deux enseignants avec le même ID
+        // Arrange
         Teacher sameTeacher = Teacher.builder()
                 .id(1L)
                 .firstName("John")
@@ -44,8 +47,7 @@ class TeacherTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        assertEquals(teacher, sameTeacher);
-        assertEquals(teacher.hashCode(), sameTeacher.hashCode());
+
 
         // Tester l'égalité avec un enseignant différent
         Teacher differentTeacher = Teacher.builder()
@@ -56,13 +58,21 @@ class TeacherTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        // Act & Assert
+        assertEquals(teacher, sameTeacher);
+        assertEquals(teacher.hashCode(), sameTeacher.hashCode());
+
         assertNotEquals(teacher, differentTeacher);
         assertNotEquals(teacher.hashCode(), differentTeacher.hashCode());
     }
 
     @Test
     void testTeacherFieldValidation() {
-        // Tester les contraintes @NotBlank et @Size
+        // Arrange
+        String firstName = teacher.getFirstName();
+        String lastName = teacher.getLastName();
+
+        // Act & Assert
         assertNotNull(teacher.getFirstName());
         assertTrue(teacher.getFirstName().length() <= 20);
 
@@ -71,16 +81,17 @@ class TeacherTests {
     }
     @Test
     void testToString() {
-        // Tester que la méthode toString() génère correctement la chaîne de caractères
-        String result = teacher.toString();
+        // Arrange
+        String result;
 
-        // Affichage pour vérifier la sortie exacte de toString()
-        System.out.println("Teacher toString: " + result);
+        // Act
+        result = teacher.toString();
 
-        // Vérifier que la chaîne contient les éléments essentiels
-        //assertTrue(result.contains("Teacher(id=1, firstName=John, lastName=Doe)"));
-
-        // Vérifier que la chaîne contient les dates de manière approximative (les dates changent à chaque exécution)
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.contains("Teacher(id=1"));
+        assertTrue(result.contains("firstName=John"));
+        assertTrue(result.contains("lastName=Doe"));
         assertTrue(result.contains("createdAt="));
         assertTrue(result.contains("updatedAt="));
     }

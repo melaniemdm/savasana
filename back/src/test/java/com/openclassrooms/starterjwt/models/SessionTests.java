@@ -50,7 +50,10 @@ public class SessionTests {
 
     @Test
     void testSessionCreation() {
-        // Tester que l'instance a été correctement créée
+        // Arrange & Act
+        // La session est déjà créée dans le setUp()
+
+        // Assert
         assertNotNull(session);
         assertEquals(1L, session.getId());
         assertEquals("Test Session", session.getName());
@@ -62,7 +65,7 @@ public class SessionTests {
 
     @Test
     void testSessionEquality() {
-        // Tester l'égalité de deux sessions avec le même ID
+        // Arrange
         Session sameSession = Session.builder()
                 .id(1L)
                 .name("Test Session")
@@ -74,10 +77,16 @@ public class SessionTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        // Act & Assert
         assertEquals(session, sameSession);
         assertEquals(session.hashCode(), sameSession.hashCode());
 
-        // Tester l'égalité avec une session différente
+
+    }
+
+    @Test
+    void testSessionNoteEquals(){
+        // Arrange
         Session differentSession = Session.builder()
                 .id(2L)
                 .name("Different Session")
@@ -89,40 +98,52 @@ public class SessionTests {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        // Act & Assert
         assertNotEquals(session, differentSession);
         assertNotEquals(session.hashCode(), differentSession.hashCode());
+
     }
 
     @Test
     void testSessionValidations() {
-        // Tester que les validations de taille et de non-nullité fonctionnent
-        assertNotNull(session.getName());
-        assertTrue(session.getName().length() <= 50);
+        // Arrange & Act
+        String name = session.getName();
+        String description = session.getDescription();
+        Date date = session.getDate();
 
-        assertNotNull(session.getDescription());
-        assertTrue(session.getDescription().length() <= 2500);
+        // Assert
+        assertNotNull(name);
+        assertTrue(name.length() <= 50);
 
-        assertNotNull(session.getDate());
+        assertNotNull(description);
+        assertTrue(description.length() <= 2500);
+
+        assertNotNull(date);
     }
 
     @Test
     void testSessionWithTeacherAndUsers() {
-        // Tester l'association avec Teacher et User
-        assertNotNull(session.getTeacher());
-        assertEquals("John", session.getTeacher().getFirstName());
-        assertEquals("Doe", session.getTeacher().getLastName());
+        // Arrange
+        Teacher sessionTeacher = session.getTeacher();
+        var sessionUsers = session.getUsers();
 
-        assertNotNull(session.getUsers());
-        assertEquals(1, session.getUsers().size());
-        assertEquals("testuser@example.com", session.getUsers().get(0).getEmail());
+        // Act & Assert
+        assertNotNull(sessionTeacher);
+        assertEquals("John", sessionTeacher.getFirstName());
+        assertEquals("Doe", sessionTeacher.getLastName());
+
+        assertNotNull(sessionUsers);
+        assertEquals(1, sessionUsers.size());
+        assertEquals("testuser@example.com", sessionUsers.get(0).getEmail());
     }
 
     @Test
     void testSessionTimestamps() {
-        // Tester que les timestamps `createdAt` et `updatedAt` sont bien initialisés
+        // Arrange
         LocalDateTime createdAt = session.getCreatedAt();
         LocalDateTime updatedAt = session.getUpdatedAt();
 
+        // Act & Assert
         assertNotNull(createdAt);
         assertNotNull(updatedAt);
     }

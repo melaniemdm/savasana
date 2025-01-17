@@ -1,7 +1,7 @@
 package com.openclassrooms.starterjwt.security.jwt;
 
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+
 
 import com.openclassrooms.starterjwt.security.services.UserDetailsServiceImpl;
 
@@ -54,18 +54,23 @@ class AuthTokenFilterTests {
 
     @Test
     void testDoFilterInternal_ValidJwtToken() throws ServletException, IOException {
-        String jwt = "validJwtToken";
-        String username = "testUser";
+        // Arrange
+        String jwt = "valideJwtToken";
+        String username = "testUserName";
 
+        // Simule les comportements des dépendances
         when(request.getHeader("Authorization")).thenReturn("Bearer " + jwt);
         when(jwtUtils.validateJwtToken(jwt)).thenReturn(true);
         when(jwtUtils.getUserNameFromJwtToken(jwt)).thenReturn(username);
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
-        when(userDetails.getAuthorities()).thenReturn(null);
 
+        UserDetails mockUserDetails = mock(UserDetails.class);
+        when(userDetailsService.loadUserByUsername(username)).thenReturn(mockUserDetails);
+        when(mockUserDetails.getAuthorities()).thenReturn(null);
+
+        // Act: Appele la méthode à tester
         authTokenFilter.doFilterInternal(request, response, filterChain);
 
+        // Assert
         verify(securityContext).setAuthentication(any(UsernamePasswordAuthenticationToken.class));
         verify(filterChain).doFilter(request, response);
     }

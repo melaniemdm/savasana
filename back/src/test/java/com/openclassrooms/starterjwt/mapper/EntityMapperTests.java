@@ -13,6 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EntityMapperTests {
 
     private EntityMapper<TestDto, TestEntity> entityMapper;
+    private TestDto testDto;
+    private TestEntity testEntity;
+    private List<TestDto> testDtoList;
+    private List<TestEntity> testEntityList;
 
     // DTO et Entity pour le test
     static class TestDto {
@@ -63,69 +67,65 @@ public class EntityMapperTests {
     void setUp() {
         // Initialisation de la fausse implémentation
         entityMapper = new TestEntityMapper();
-    }
 
-    @Test
-    void testToEntity() {
-        // Arrange
-        TestDto dto = new TestDto(1L, "Test DTO");
+        // Initialisation des données pour les tests
+        testDto = new TestDto(1L, "Test DTO");
+        testEntity = new TestEntity(2L, "Test Entity");
 
-        // Act
-        TestEntity entity = entityMapper.toEntity(dto);
-
-        // Assert
-        assertNotNull(entity);
-        assertEquals(1L, entity.id);
-        assertEquals("Test DTO", entity.name);
-    }
-
-    @Test
-    void testToDto() {
-        // Arrange
-        TestEntity entity = new TestEntity(2L, "Test Entity");
-
-        // Act
-        TestDto dto = entityMapper.toDto(entity);
-
-        // Assert
-        assertNotNull(dto);
-        assertEquals(2L, dto.id);
-        assertEquals("Test Entity", dto.name);
-    }
-
-    @Test
-    void testToEntityList() {
-        // Arrange
-        List<TestDto> dtoList = Arrays.asList(
+        testDtoList = Arrays.asList(
                 new TestDto(1L, "DTO 1"),
                 new TestDto(2L, "DTO 2")
         );
 
+        testEntityList = Arrays.asList(
+                new TestEntity(1L, "Entity 1"),
+                new TestEntity(2L, "Entity 2")
+        );
+    }
+
+    @Test
+    void testToEntity() {
         // Act
-        List<TestEntity> entityList = entityMapper.toEntity(dtoList);
+        TestEntity result = entityMapper.toEntity(testDto);
 
         // Assert
-        assertNotNull(entityList);
-        assertEquals(2, entityList.size());
-        assertEquals("DTO 1", entityList.get(0).name);
-        assertEquals("DTO 2", entityList.get(1).name);
+        assertNotNull(result, "L'entité ne doit pas être null");
+        assertEquals(1L, result.id, "L'id de l'entité doit être correct");
+        assertEquals("Test DTO", result.name, "Le nom de l'entité doit être correct");
+    }
+
+    @Test
+    void testToDto() {
+        // Act
+        TestDto result = entityMapper.toDto(testEntity);
+
+        // Assert
+        assertNotNull(result, "Le DTO ne doit pas être null");
+        assertEquals(2L, result.id, "L'id du DTO doit être correct");
+        assertEquals("Test Entity", result.name, "Le nom du DTO doit être correct");
+    }
+
+    @Test
+    void testToEntityList() {
+        // Act
+        List<TestEntity> result = entityMapper.toEntity(testDtoList);
+
+        // Assert
+        assertNotNull(result, "La liste d'entités ne doit pas être null");
+        assertEquals(2, result.size(), "La liste d'entités doit contenir 2 éléments");
+        assertEquals("DTO 1", result.get(0).name, "Le nom du premier élément doit être correct");
+        assertEquals("DTO 2", result.get(1).name, "Le nom du second élément doit être correct");
     }
 
     @Test
     void testToDtoList() {
-        // Arrange
-        List<TestEntity> entityList = Arrays.asList(
-                new TestEntity(1L, "Entity 1"),
-                new TestEntity(2L, "Entity 2")
-        );
-
         // Act
-        List<TestDto> dtoList = entityMapper.toDto(entityList);
+        List<TestDto> result = entityMapper.toDto(testEntityList);
 
         // Assert
-        assertNotNull(dtoList);
-        assertEquals(2, dtoList.size());
-        assertEquals("Entity 1", dtoList.get(0).name);
-        assertEquals("Entity 2", dtoList.get(1).name);
+        assertNotNull(result, "La liste de DTO ne doit pas être null");
+        assertEquals(2, result.size(), "La liste de DTO doit contenir 2 éléments");
+        assertEquals("Entity 1", result.get(0).name, "Le nom du premier élément doit être correct");
+        assertEquals("Entity 2", result.get(1).name, "Le nom du second élément doit être correct");
     }
 }

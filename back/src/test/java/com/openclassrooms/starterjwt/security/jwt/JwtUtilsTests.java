@@ -18,12 +18,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 class JwtUtilsTests {
 
-    @Mock
-    private Authentication authentication;
-
-    @InjectMocks
     private JwtUtils jwtUtils;
-
+    private Authentication authentication;
     private UserDetailsImpl userDetails;
 
     private String jwtSecret = "testSecretKey";
@@ -31,7 +27,9 @@ class JwtUtilsTests {
 
     @BeforeEach
     void setUp() {
-        // Initialisation d'un UserDetailsImpl pour les tests
+        jwtUtils = new JwtUtils();
+        authentication = mock(Authentication.class);
+
         userDetails = UserDetailsImpl.builder()
                 .id(1L)
                 .username("testuser@example.com")
@@ -43,24 +41,21 @@ class JwtUtilsTests {
 
         // Initialiser l'instance de JwtUtils si elle est null
         if (jwtUtils == null) {
-            jwtUtils = new JwtUtils();  // Assurez-vous que jwtUtils est bien instancié
+            jwtUtils = new JwtUtils();
         }
 
-        // Utilisation de réflexion pour accéder et modifier les variables privées
         try {
-            Field jwtSecretField = JwtUtils.class.getDeclaredField("jwtSecret");
-            jwtSecretField.setAccessible(true); // Permet l'accès aux champs privés
-            jwtSecretField.set(jwtUtils, jwtSecret); // Définir la valeur de jwtSecret
-
-            Field jwtExpirationMsField = JwtUtils.class.getDeclaredField("jwtExpirationMs");
-            jwtExpirationMsField.setAccessible(true);
-            jwtExpirationMsField.set(jwtUtils, jwtExpirationMs); // Définir la valeur de jwtExpirationMs
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            fail("Failed to access private fields");
+            setPrivateField(jwtUtils, "jwtSecret", jwtSecret);
+            setPrivateField(jwtUtils, "jwtExpirationMs", jwtExpirationMs);
+        } catch (Exception e) {
+            fail("Failed to set private fields: " + e.getMessage());
         }
     }
-
+    private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
+        Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
+    }
 
 
     @Test

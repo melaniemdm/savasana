@@ -43,21 +43,29 @@ public class LoginRequestTests {
     @Test
     void testEmailNotBlank() {
         // Arrange
-        loginRequest.setEmail("testuser@example.com");
+        String email = "testuser@example.com";
+        loginRequest.setEmail(email);
+
+        // Act
+        String result = loginRequest.getEmail();
 
         // Assert
-        assertNotNull(loginRequest.getEmail());
-        assertTrue(loginRequest.getEmail().length() > 0, "Email should not be blank");
+        assertNotNull(result, "Email should not be null");
+        assertTrue(result.length() > 0, "Email should not be blank");
     }
 
     @Test
     void testPasswordNotBlank() {
         // Arrange
-        loginRequest.setPassword("securePassword");
+        String password = "securePassword";
+        loginRequest.setPassword(password);
+
+        // Act
+        String result = loginRequest.getPassword();
 
         // Assert
-        assertNotNull(loginRequest.getPassword());
-        assertTrue(loginRequest.getPassword().length() > 0, "Password should not be blank");
+        assertNotNull(result, "Password should not be null");
+        assertTrue(result.length() > 0, "Password should not be blank");
     }
 }
 
