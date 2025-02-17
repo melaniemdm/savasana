@@ -19,6 +19,10 @@ Clone the project, then install the dependencies and configure the database:
 ```bash
   git clone https://github.com/melaniemdm/savasana.git
 ```
+Go inside folder:
+```bash
+  cd front
+```
 
 Install the project dependencies:
 ```bash
@@ -43,9 +47,9 @@ Install the project dependencies:
 CREATE DATABASE test;
 ```
 3. Importez le script SQL de structure et de données initiales depuis le fichier `script.sql` dans le dossier
-   `Testez-une-application-full-stack/ressources/sql` :
+   `ressources/sql` :
 ```bash
-  mysql -u root -p test < Testez-une-application-full-stack/ressources/sql/script.sql
+  mysql -u root -p test < ressources/sql/script.sql
 ```
    
 4. Assurez-vous que le serveur MySQL est en cours d'exécution.
