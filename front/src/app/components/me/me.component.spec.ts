@@ -52,15 +52,8 @@ describe('MeComponent', () => {
 describe('MeComponent Integration Test', () => {
   let component: MeComponent;
   let fixture: ComponentFixture<MeComponent>;
-  let userService: jest.Mocked<UserService>;
-  let router: jest.Mocked<Router>;
+  let userService: UserService;
 
-  const mockUser = {
-    id: 1,
-    firstName: 'melanie',
-    lastName: 'lisanna',
-    email: 'mel.lisa@example.com',
-  };
 
   const mockSessionService = {
     sessionInformation: {
@@ -70,36 +63,55 @@ describe('MeComponent Integration Test', () => {
     logOut: jest.fn(),
   };
 
+  const mockRouter = {
+    navigate: jest.fn(),
+  } as Partial<Router> as jest.Mocked<Router>;
+
+  // mock des données renvoyées par getById
+  const mockUser = {
+    id: 1,
+    firstName: 'melanie',
+    lastName: 'lisanna',
+    email: 'mel.lisa@example.com',
+    admin: true,
+    password: 'secret',
+    createdAt: new Date('2023-01-01'),
+  };
+
+
   beforeEach(async () => {
-    userService = {
-      getById: jest.fn().mockReturnValue(of(mockUser)),
-      delete: jest.fn().mockReturnValue(of(null)),
-    } as Partial<UserService> as jest.Mocked<UserService>;
-
-    router = {
-      navigate: jest.fn(),
-    } as Partial<Router> as jest.Mocked<Router>;
-
     await TestBed.configureTestingModule({
       declarations: [MeComponent],
       imports: [
+        HttpClientModule,
         MatSnackBarModule,
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
         BrowserAnimationsModule,
-        NoopAnimationsModule,  // Import du module des animations
+        NoopAnimationsModule,
       ],
       providers: [
-        { provide: UserService, useValue: userService },
+
         { provide: SessionService, useValue: mockSessionService },
-        { provide: Router, useValue: router },
+        { provide: Router, useValue: mockRouter },
+
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
+    
+    userService = TestBed.inject(UserService);
+
+   
+    //Espoinne les méthodes du vrai service.
+       jest.spyOn(userService, 'getById').mockReturnValue(of(mockUser));
+    jest.spyOn(userService, 'delete').mockReturnValue(of(null));
+   
+
     fixture.detectChanges();
   });
 
@@ -108,7 +120,8 @@ describe('MeComponent Integration Test', () => {
   });
 
   it('should call UserService.getById on initialization', () => {
-    expect(userService.getById).toHaveBeenCalledWith('1');
+    component.ngOnInit();
+    expect(userService.getById).toHaveBeenCalledWith("1");
     expect(component.user).toEqual(mockUser);
   });
 
@@ -120,8 +133,11 @@ describe('MeComponent Integration Test', () => {
 
   it('should call UserService.delete and navigate to "/" on delete()', () => {
     component.delete();
+
     expect(userService.delete).toHaveBeenCalledWith('1');
+
     expect(mockSessionService.logOut).toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith(['/']);
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
   });
 });
