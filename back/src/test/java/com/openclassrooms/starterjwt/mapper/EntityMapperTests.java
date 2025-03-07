@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Test pour EntityMapper
+
 public class EntityMapperTests {
 
     private EntityMapper<TestDto, TestEntity> entityMapper;
@@ -18,7 +18,7 @@ public class EntityMapperTests {
     private List<TestDto> testDtoList;
     private List<TestEntity> testEntityList;
 
-    // DTO et Entity pour le test
+    // DTO et Entity
     static class TestDto {
         public Long id;
         public String name;
@@ -39,7 +39,7 @@ public class EntityMapperTests {
         }
     }
 
-    // Fake Implementation pour le test
+    // Fake Implementation
     private static class TestEntityMapper implements EntityMapper<TestDto, TestEntity> {
 
         @Override
@@ -65,10 +65,10 @@ public class EntityMapperTests {
 
     @BeforeEach
     void setUp() {
-        // Initialisation de la fausse implémentation
+        // Initialisation du mock de l'implémentation
         entityMapper = new TestEntityMapper();
 
-        // Initialisation des données pour les tests
+        // Initialisation des données
         testDto = new TestDto(1L, "Test DTO");
         testEntity = new TestEntity(2L, "Test Entity");
 

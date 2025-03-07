@@ -51,9 +51,7 @@ public class SessionTests {
     @Test
     void testSessionCreation() {
         // Arrange & Act
-        // La session est déjà créée dans le setUp()
-
-        // Assert
+      // Assert
         assertNotNull(session);
         assertEquals(1L, session.getId());
         assertEquals("Test Session", session.getName());

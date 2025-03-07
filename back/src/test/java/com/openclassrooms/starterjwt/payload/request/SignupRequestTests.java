@@ -11,7 +11,7 @@ public class SignupRequestTests {
 
     @BeforeEach
     void setUp() {
-        // Initialisation d'un objet SignupRequest pour les tests
+        // Initialisation d'un objet SignupRequest
         signupRequest = new SignupRequest();
     }
 

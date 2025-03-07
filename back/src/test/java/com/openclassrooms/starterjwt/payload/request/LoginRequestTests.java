@@ -12,7 +12,7 @@ public class LoginRequestTests {
 
     @BeforeEach
     void setUp() {
-        // Initialisation d'un objet LoginRequest pour les tests
+        // Initialisation d'un objet LoginRequest
         loginRequest = new LoginRequest();
     }
 

@@ -25,6 +25,7 @@ public class SessionServicesTests {
     void setUp() {
         sessionRepository = mock(SessionRepository.class);
         userRepository = mock(UserRepository.class);
+
         sessionService = new SessionService(sessionRepository, userRepository);
     }
 
@@ -133,7 +134,7 @@ public class SessionServicesTests {
         // Act: Appel la méthode pour ajouter l'utilisateur à la session
         assertDoesNotThrow(() -> sessionService.participate(sessionId, userId));
 
-        // Assert: Vérifier que l'utilisateur a été ajouté à la session
+        // Assert: Vérifie que l'user a été ajouté à la session
         assertEquals(1, session.getUsers().size(), "La session doit contenir un utilisateur");
         assertTrue(session.getUsers().contains(user), "La session doit contenir l'utilisateur ajouté");
         verify(sessionRepository, times(1)).save(session);

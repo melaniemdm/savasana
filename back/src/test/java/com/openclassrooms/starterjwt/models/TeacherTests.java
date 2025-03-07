@@ -49,7 +49,7 @@ class TeacherTests {
 
 
 
-        // Tester l'égalité avec un enseignant différent
+        // Teste l'égalité avec un enseignant différent
         Teacher differentTeacher = Teacher.builder()
                 .id(2L)
                 .firstName("Jane")

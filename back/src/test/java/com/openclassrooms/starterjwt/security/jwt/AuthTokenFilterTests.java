@@ -67,7 +67,7 @@ class AuthTokenFilterTests {
         when(userDetailsService.loadUserByUsername(username)).thenReturn(mockUserDetails);
         when(mockUserDetails.getAuthorities()).thenReturn(null);
 
-        // Act: Appele la méthode à tester
+        // Act
         authTokenFilter.doFilterInternal(request, response, filterChain);
 
         // Assert

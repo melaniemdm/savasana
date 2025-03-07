@@ -3,7 +3,7 @@ package com.openclassrooms.starterjwt.security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ public class AuthEntryPointJwtTests {
         mockResponse = mock(HttpServletResponse.class);
         mockAuthException = mock(AuthenticationException.class);
 
-        // Simuler l'OutputStream
+        // Simule l'OutputStream
         outputStream = new ByteArrayOutputStream();
         DelegatingServletOutputStream servletOutputStream = new DelegatingServletOutputStream(outputStream);
 

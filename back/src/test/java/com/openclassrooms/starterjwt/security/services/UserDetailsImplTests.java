@@ -14,7 +14,7 @@ class UserDetailsImplTests {
 
     @BeforeEach
     void setUp() {
-        // Création de l'objet UserDetailsImpl
+
         userDetails = UserDetailsImpl.builder()
                 .id(1L)
                 .username("testuser@example.com")
@@ -32,7 +32,7 @@ class UserDetailsImplTests {
 
         // Assert
         assertNotNull(authorities);
-        assertTrue(authorities.isEmpty());  // La méthode getAuthorities retourne une collection vide
+        assertTrue(authorities.isEmpty());
     }
 
     @Test
@@ -65,7 +65,7 @@ class UserDetailsImplTests {
         boolean result = userDetails.equals(userDetails);
 
         // Assert
-        assertTrue(result);
+        assertTrue(result); // meme objet userDetails
     }
 
     @Test

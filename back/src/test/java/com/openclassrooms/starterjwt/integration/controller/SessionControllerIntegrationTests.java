@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -52,11 +53,10 @@ public class SessionControllerIntegrationTests {
         // Nettoyage de la base de données pour chaque test
         sessionRepository.deleteAll();
 
-        // Insertion de données de test
         Session session = new Session();
         session.setName("Test Session");
         session.setDescription("Description for Test Session");
-        session.setDate(new Date()); // Ajout de la date obligatoire
+        session.setDate(new Date());
         sessionRepository.save(session);
     }
 
@@ -129,9 +129,9 @@ public class SessionControllerIntegrationTests {
         sessionDto.setDate(new Date());
         sessionDto.setTeacher_id(1L); // Ajout d'un ID de professeur valide
 
-        // S'assurer que l'enseignant existe dans la base de données
+        // S'assure que l'enseignant existe dans la base de données
         Teacher teacher = new Teacher();
-        teacher.setId(1L); // Utiliser l'ID correspondant
+        teacher.setId(1L);
         teacher.setFirstName("firstNameTeacher");
 
 
@@ -161,16 +161,16 @@ public class SessionControllerIntegrationTests {
     @Test
     public void testUpdate_Success() throws Exception {
         // Arrange
-        // Ajouter un Teacher valide dans la base de données
+        // Ajoute un Teacher valide dans la bd
         Teacher teacher = new Teacher();
         teacher.setId(1L);
         teacher.setFirstName("John");
         teacher.setLastName("Doe");
 
-        // Ajouter une Session existante
+        // Ajoute une Session existante
         Session existingSession = sessionRepository.findAll().get(0);
 
-        // Préparer un SessionDto avec un teacher_id valide
+        // Prépare un SessionDto avec un teacher_id valide
         SessionDto updatedSessionDto = new SessionDto();
         updatedSessionDto.setName("Updated Session");
         updatedSessionDto.setDescription("Updated description for session");
@@ -186,7 +186,7 @@ public class SessionControllerIntegrationTests {
                 .andExpect(jsonPath("$.name").value("Updated Session"))
                 .andExpect(jsonPath("$.description").value("Updated description for session"));
 
-        // Vérification dans la base de données
+        // Vérification dans la bd
         Session updatedSession = sessionRepository.findById(existingSession.getId()).orElseThrow();
         assertEquals("Updated Session", updatedSession.getName());
         assertEquals("Updated description for session", updatedSession.getDescription());
@@ -218,7 +218,7 @@ public class SessionControllerIntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        // Vérification dans la base de données
+        // Vérification dans la bd
         assertFalse(sessionRepository.findById(session.getId()).isPresent());
     }
     @Test

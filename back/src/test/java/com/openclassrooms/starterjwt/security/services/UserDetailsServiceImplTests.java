@@ -22,17 +22,15 @@ class UserDetailsServiceImplTests {
     void setUp() {
         // Initialisation des mocks
         userRepository = mock(UserRepository.class);
-
-        // Initialisation du service avec le mock
         userDetailsService = new UserDetailsServiceImpl(userRepository);
 
-        // Création de l'utilisateur pour les tests
+        // Création de l'user pour les tests
         user = new User("testuser@example.com", "Doe", "John", "encodedPassword", false);
         user.setId(1L);
     }
 
     @Test
-    void testLoadUserByUsername_Success() {
+    void testGetUserByUsername_Success() {
         // Arrange
         when(userRepository.findByEmail("testuser@example.com")).thenReturn(Optional.of(user));
 

@@ -113,7 +113,7 @@ class UserTests {
         // Arrange, Act et Assert
         assertThrows(NullPointerException.class, () -> {
             User nullFieldUser = User.builder()
-                    .email(null) // email est non-nul, donc une exception devrait être levée ici
+                    .email(null) // email est non-nul
                     .lastName("Doe")
                     .firstName("John")
                     .password("encodedPassword")

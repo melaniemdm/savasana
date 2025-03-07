@@ -21,8 +21,7 @@ import com.openclassrooms.starterjwt.payload.response.MessageResponse;
 import com.openclassrooms.starterjwt.repository.UserRepository;
 import com.openclassrooms.starterjwt.security.jwt.JwtUtils;
 import com.openclassrooms.starterjwt.security.services.UserDetailsImpl;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
+
 
 
 import java.util.Optional;
@@ -52,7 +51,7 @@ class AuthControllerTests {
         // Initialisation du contrôleur avec les mocks
         authController = new AuthController(authenticationManager, passwordEncoder, jwtUtils, userRepository);
 
-        // Initialisation d'un UserDetailsImpl pour les tests
+        // Initialisation d'un faux user
         userDetails = UserDetailsImpl.builder()
                 .id(1L)
                 .username("testuser@example.com")

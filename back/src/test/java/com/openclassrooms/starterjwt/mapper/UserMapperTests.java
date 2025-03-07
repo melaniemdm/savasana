@@ -28,7 +28,7 @@ public class UserMapperTests {
         userDto.setId(1L);
         userDto.setFirstName("John");
         userDto.setLastName("Doe");
-        userDto.setEmail("johndoe@example.com");  // Ajout de l'email nécessaire
+        userDto.setEmail("johndoe@example.com");
         userDto.setPassword("password");
         userDto.setAdmin(true);
         userDto.setCreatedAt(LocalDateTime.now());
@@ -56,7 +56,7 @@ public class UserMapperTests {
                 .id(2L)
                 .firstName("Jane")
                 .lastName("Smith")
-                .email("janesmith@example.com") // Ajout de l'email nécessaire
+                .email("janesmith@example.com")
                 .password("encodedPassword")
                 .admin(false)
                 .createdAt(LocalDateTime.now())

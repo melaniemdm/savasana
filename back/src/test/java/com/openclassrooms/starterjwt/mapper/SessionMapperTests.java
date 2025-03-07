@@ -42,7 +42,7 @@ public class SessionMapperTests {
         sessionDto.setTeacher_id(1L);
         sessionDto.setUsers(Arrays.asList(2L, 3L));
 
-        // Mocker les retours des services avec les bons types
+        // Mocke les retours des services avec les bons types
         Teacher mockTeacher = new Teacher();
         mockTeacher.setId(1L);
 
@@ -91,7 +91,7 @@ public class SessionMapperTests {
         // Assert
         assertNotNull(sessionDto);
         assertEquals("Test Session", sessionDto.getDescription());
-        assertEquals(1L, sessionDto.getTeacher_id()); // Vérifie l'ID du teacher
+        assertEquals(1L, sessionDto.getTeacher_id());
         List<Long> userIds = sessionDto.getUsers();
         assertNotNull(userIds);
         assertEquals(2, userIds.size());
