@@ -9,26 +9,15 @@ import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.context.ActiveProfiles;
-
-import java.util.Optional;
-
 
 class UserControllerTests {
     private UserService userService;
-    private UserMapper userMapper;
-    private Authentication authentication;
     private UserController userController;
 
-    private User user;
     private UserDto userDto;
     private UserDetails userDetails;
 
@@ -36,14 +25,14 @@ class UserControllerTests {
     void setUp() {
         // Initialisation des mocks
         userService = mock(UserService.class);
-        userMapper = mock(UserMapper.class);
-        authentication = mock(Authentication.class);
+        UserMapper userMapper = mock(UserMapper.class);
+        Authentication authentication = mock(Authentication.class);
 
         // Initialisation explicite du contrôleur avec les mocks
         userController = new UserController(userService, userMapper);
 
         // Initialisation des objets pour les tests
-        user = new User();
+        User user = new User();
         user.setId(1L);
         user.setEmail("john.doe@example.com");
         user.setFirstName("John");
@@ -55,12 +44,12 @@ class UserControllerTests {
         userDto.setFirstName("John");
         userDto.setLastName("Doe");
 
-        // Simuler le comportement de userService et userMapper
+        // Simule le comportement de userService et userMapper
         when(userService.findById(1L)).thenReturn(user);
         when(userMapper.toDto(user)).thenReturn(userDto);
         when(userService.findById(999L)).thenReturn(null);
 
-        // Simuler un utilisateur authentifié
+        // Simule un utilisateur authentifié
         userDetails = mock(UserDetails.class);
         when(userDetails.getUsername()).thenReturn("john.doe@example.com");
         when(authentication.getPrincipal()).thenReturn(userDetails);
@@ -98,7 +87,7 @@ class UserControllerTests {
 
     @Test
     void testSave_Unauthorized() {
-        // Simuler un utilisateur authentifié différent
+        // Simule un utilisateur authentifié différent
         when(userDetails.getUsername()).thenReturn("other.email@example.com");
 
         // Act

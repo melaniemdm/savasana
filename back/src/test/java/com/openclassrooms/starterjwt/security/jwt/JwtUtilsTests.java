@@ -19,18 +19,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 class JwtUtilsTests {
 
     private JwtUtils jwtUtils;
-    private Authentication authentication;
-    private UserDetailsImpl userDetails;
 
-    private String jwtSecret = "testSecretKey";
-    private int jwtExpirationMs = 3600000; // 1 hour
+    private final String jwtSecret = "testSecretKey";
+    private final int jwtExpirationMs = 3600000; // 1 hour
 
     @BeforeEach
     void setUp() {
         jwtUtils = new JwtUtils();
-        authentication = mock(Authentication.class);
+        Authentication authentication = mock(Authentication.class);
 
-        userDetails = UserDetailsImpl.builder()
+        UserDetailsImpl userDetails = UserDetailsImpl.builder()
                 .id(1L)
                 .username("testuser@example.com")
                 .firstName("John")
@@ -39,7 +37,7 @@ class JwtUtilsTests {
                 .password("encodedPassword")
                 .build();
 
-        // Initialiser l'instance de JwtUtils si elle est null
+        // Initialise l'instance de JwtUtils si elle est null
         if (jwtUtils == null) {
             jwtUtils = new JwtUtils();
         }
