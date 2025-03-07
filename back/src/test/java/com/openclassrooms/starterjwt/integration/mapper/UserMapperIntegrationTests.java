@@ -1,27 +1,26 @@
 package com.openclassrooms.starterjwt.integration.mapper;
 import com.openclassrooms.starterjwt.dto.UserDto;
+import com.openclassrooms.starterjwt.mapper.UserMapper;
 import com.openclassrooms.starterjwt.mapper.UserMapperImpl;
 import com.openclassrooms.starterjwt.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-
+@SpringBootTest
 @ActiveProfiles("test")
 public class UserMapperIntegrationTests {
-
-    private UserMapperImpl userMapper;
-
-    @BeforeEach
-    public void setUp() {
-        userMapper = new UserMapperImpl();
-    }
+    @Autowired
+    private UserMapper userMapper; // Le mapper généré par MapStruct est injecté ici
 
     @Test
     public void testToEntity_NullDto() {
@@ -34,7 +33,6 @@ public class UserMapperIntegrationTests {
         // Assert
         assertNull(result, "toEntity should return null when the input DTO is null");
     }
-
     @Test
     public void testToEntity_ValidDto() {
         // Arrange
@@ -62,7 +60,6 @@ public class UserMapperIntegrationTests {
         assertEquals(dto.getCreatedAt(), result.getCreatedAt(), "CreatedAt should match");
         assertEquals(dto.getUpdatedAt(), result.getUpdatedAt(), "UpdatedAt should match");
     }
-
     @Test
     public void testToDto_NullEntity() {
         // Arrange
@@ -74,7 +71,6 @@ public class UserMapperIntegrationTests {
         // Assert
         assertNull(result, "toDto should return null when the input entity is null");
     }
-
     @Test
     public void testToDto_ValidEntity() {
         // Arrange
@@ -103,7 +99,6 @@ public class UserMapperIntegrationTests {
         assertEquals(user.getCreatedAt(), result.getCreatedAt(), "CreatedAt should match");
         assertEquals(user.getUpdatedAt(), result.getUpdatedAt(), "UpdatedAt should match");
     }
-
     @Test
     public void testToEntity_NullList() {
         // Arrange
@@ -115,8 +110,6 @@ public class UserMapperIntegrationTests {
         // Assert
         assertNull(result, "toEntity should return null when the input list is null");
     }
-
-
     @Test
     public void testToEntity_EmptyList() {
         // Arrange
@@ -129,9 +122,6 @@ public class UserMapperIntegrationTests {
         assertNotNull(result, "toEntity should not return null for an empty list");
         assertTrue(result.isEmpty(), "toEntity should return an empty list for an empty input");
     }
-
-
-
     @Test
     public void testToDto_EmptyList() {
         // Arrange
@@ -144,7 +134,6 @@ public class UserMapperIntegrationTests {
         assertNotNull(result, "toDto should not return null for an empty list");
         assertTrue(result.isEmpty(), "toDto should return an empty list for an empty input");
     }
-
     @Test
     public void testToDto_NullList() {
         // Arrange
@@ -156,7 +145,6 @@ public class UserMapperIntegrationTests {
         // Assert
         assertNull(result, "toDto should return null when the input list is null");
     }
-
     @Test
     public void testToEntity_ListWithValidDtos() {
         // Arrange
@@ -165,16 +153,16 @@ public class UserMapperIntegrationTests {
         UserDto dto1 = new UserDto();
         dto1.setId(1L);
         dto1.setEmail("test1@example.com");
-        dto1.setFirstName("John");
-        dto1.setLastName("Doe");
-        dto1.setPassword("password123"); // Ajout du mot de passe
+        dto1.setFirstName("mel");
+        dto1.setLastName("mdm");
+        dto1.setPassword("password123");
 
         UserDto dto2 = new UserDto();
         dto2.setId(2L);
         dto2.setEmail("test2@example.com");
-        dto2.setFirstName("Jane");
-        dto2.setLastName("Smith");
-        dto2.setPassword("securePassword"); // Ajout du mot de passe
+        dto2.setFirstName("lisanna");
+        dto2.setLastName("lauraline");
+        dto2.setPassword("securePassword");
 
         dtoList.add(dto1);
         dtoList.add(dto2);
@@ -227,7 +215,6 @@ public class UserMapperIntegrationTests {
         assertNotNull(result, "toDto should not return null for a valid input list");
         assertEquals(2, result.size(), "toDto should map the correct number of items");
 
-
         UserDto dto1 = result.get(0);
         assertEquals(user1.getId(), dto1.getId(), "ID of the first item should match");
         assertEquals(user1.getEmail(), dto1.getEmail(), "Email of the first item should match");
@@ -244,5 +231,108 @@ public class UserMapperIntegrationTests {
         assertEquals(user2.getPassword(), dto2.getPassword(), "Password of the second item should match");
         assertEquals(user2.isAdmin(), dto2.isAdmin(), "Admin status of the second item should match");
     }
+    @Test
+    public void testToEntity_NullTimestamps() {
+        // Arrange
+        UserDto dto = new UserDto();
+        dto.setId(10L);
+        dto.setEmail("nulltimestamps@example.com");
+        dto.setFirstName("Null");
+        dto.setLastName("Timestamps");
+        dto.setPassword("nopassword");
+        dto.setAdmin(false);
+        dto.setCreatedAt(null);
+        dto.setUpdatedAt(null);
 
+        // Act
+        User userResult = userMapper.toEntity(dto);
+
+        // Assert
+        assertNotNull(userResult);
+        assertEquals(10L, userResult.getId());
+        assertEquals("nulltimestamps@example.com", userResult.getEmail());
+        assertEquals("Null", userResult.getFirstName());
+        assertEquals("Timestamps", userResult.getLastName());
+        assertEquals("nopassword", userResult.getPassword());
+        assertFalse(userResult.isAdmin());
+        assertNull(userResult.getCreatedAt());
+        assertNull(userResult.getUpdatedAt());
+    }
+    @Test
+    public void testToDto_NullTimestamps() {
+        // Arrange
+        User userEntity = User.builder()
+                .id(20L)
+                .email("nulltimestamps2@example.com")
+                .firstName("Null")
+                .lastName("Time")
+                .password("nopassword")
+                .admin(true)
+                .createdAt(null)
+                .updatedAt(null)
+                .build();
+
+        // Act
+        UserDto dtoResult = userMapper.toDto(userEntity);
+
+        // Assert
+        assertNotNull(dtoResult);
+        assertEquals(20L, dtoResult.getId());
+        assertEquals("nulltimestamps2@example.com", dtoResult.getEmail());
+        assertEquals("Null", dtoResult.getFirstName());
+        assertEquals("Time", dtoResult.getLastName());
+        assertEquals("nopassword", dtoResult.getPassword());
+        assertTrue(dtoResult.isAdmin());
+        assertNull(dtoResult.getCreatedAt());
+        assertNull(dtoResult.getUpdatedAt());
+    }
+    @Test
+    public void testToEntity_ListContainingNull() {
+        // Arrange
+        UserDto dto1 = new UserDto();
+        dto1.setId(1L);
+        dto1.setEmail("first@example.com");
+        dto1.setFirstName("First");
+        dto1.setLastName("User");
+        dto1.setPassword("pass1");
+        dto1.setAdmin(true);
+        dto1.setCreatedAt(LocalDateTime.now());
+        dto1.setUpdatedAt(LocalDateTime.now());
+
+        List<UserDto> dtos = Arrays.asList(dto1, null);
+
+        // Act
+        List<User> users = userMapper.toEntity(dtos);
+
+        // Assert : La liste doit contenir deux éléments, le deuxième étant null
+        assertNotNull(users);
+        assertEquals(2, users.size());
+        assertNotNull(users.get(0));
+        assertNull(users.get(1), "Le second élément devrait être null");
+    }
+    @Test
+    public void testToDto_ListContainingNull() {
+        // Arrange
+        User user1 = User.builder()
+                .id(1L)
+                .email("first@example.com")
+                .firstName("First")
+                .lastName("User")
+                .password("pass1")
+                .admin(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        List<User> users = Arrays.asList(user1, null);
+
+        // Act
+        List<UserDto> dtos = userMapper.toDto(users);
+
+        // Assert : La liste doit contenir deux éléments, le second étant null
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
+        assertNotNull(dtos.get(0));
+        assertNull(dtos.get(1), "Le second élément devrait être null");
+    }
 }
