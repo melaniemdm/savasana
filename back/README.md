@@ -21,7 +21,7 @@ Clone the project, then install the dependencies and configure the database:
 ```
 Go inside folder:
 ```bash
-  cd front
+  cd back
 ```
 
 Install the project dependencies:
