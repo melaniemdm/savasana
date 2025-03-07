@@ -28,7 +28,7 @@ describe('lougout', () => {
 
     cy.contains('Logout').click
     cy.visit('/sessions')
-    //retourne sur login
+    //retourne sur login car je me delogue
     cy.url().should('include', '/login')
   })
 })

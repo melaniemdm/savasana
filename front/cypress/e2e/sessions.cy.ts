@@ -41,7 +41,7 @@ describe('Sessions spec', () => {
     cy.wait('@session')
     cy.url().should('include', '/sessions')
 
-    // Vérifier que la session est affichée dans la liste
+    // Vérifie que la session est affichée dans la liste
     cy.contains('Yoga fun bébé').should('be.visible')
     cy.contains('Yoga pour adulte').should('be.visible')
     cy.contains('New Yoga fun session for babies').should('be.visible')
@@ -50,7 +50,7 @@ describe('Sessions spec', () => {
   })
 
   it('appearance of the detail and edit button on the admin session', () => {
-    // Vérifier que les bouttons Detail et edit sont visibles                   
+    // Vérifie que les bouttons Detail et edit sont visibles                   
     cy.contains('Detail').should('be.visible')
     cy.contains('Edit').should('be.visible')
 
@@ -93,6 +93,7 @@ describe('Sessions spec', () => {
 
     cy.get('input[formControlName=email]').type("mel@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
     cy.contains('Detail').should('be.visible')
     cy.contains('Edit').should('not.exist')
   })

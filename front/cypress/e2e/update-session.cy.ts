@@ -26,7 +26,7 @@ describe('update session', () => {
       }],
     }).as('session')
 
-    // Intercepter l'API des professeurs
+
     cy.intercept('GET', '/api/teacher', {
       body: [
         { id: 1, firstName: 'Margot', lastName: 'DELAHAYE' },
@@ -34,7 +34,7 @@ describe('update session', () => {
       ],
     }).as('teachers');
 
-    // Interception de la requête GET pour le détail d'une session
+
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -47,7 +47,7 @@ describe('update session', () => {
     }).as('sessionDetail')
 
 
-    // Interception de la requête PUT pour le détail d'une session
+
     cy.intercept('PUT', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -62,6 +62,7 @@ describe('update session', () => {
 
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
     cy.contains("Edit").click()
 
     cy.url().should('include', '/sessions')
@@ -103,7 +104,7 @@ describe('update session', () => {
       }],
     }).as('session')
 
-    // Intercepter l'API des professeurs
+
     cy.intercept('GET', '/api/teacher', {
       body: [
         { id: 1, firstName: 'Margot', lastName: 'DELAHAYE' },
@@ -111,7 +112,7 @@ describe('update session', () => {
       ],
     }).as('teachers');
 
-    // Interception de la requête GET pour le détail d'une session
+
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -127,9 +128,12 @@ describe('update session', () => {
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
 
     cy.contains("Edit").click()
+
     cy.get('input[formControlName=name]').clear()
     cy.get('input[formControlName=date]').click()
+
     cy.contains('Name').should('have.css', 'color', 'rgb(244, 67, 54)')
+    // Save est désactivé
     cy.contains('Save').should('be.disabled')
   })
 

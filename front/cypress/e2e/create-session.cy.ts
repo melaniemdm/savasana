@@ -13,11 +13,11 @@ describe('create session spec', () => {
         admin: true
       },
     })
-    // Intercepter l'API des sessions
+
     cy.intercept('GET', '/api/session', []).as('sessions');
 
 
-    // Intercepter l'API des professeurs
+
     cy.intercept('GET', '/api/teacher', {
       body: [
         { id: 1, firstName: 'Margot', lastName: 'DELAHAYE' },
@@ -25,7 +25,7 @@ describe('create session spec', () => {
       ],
     }).as('createSession');
 
-    // Intercepter l'API de création de session
+
     cy.intercept('POST', '/api/session', {
       statusCode: 201,
       body: {
@@ -40,26 +40,20 @@ describe('create session spec', () => {
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
 
-    // Naviguer vers la page de création
+
     cy.contains('Create').click();
     cy.url().should('include', '/sessions/create');
-
-
 
     cy.get('input[formControlName=name]').type("Yoga fun")
     cy.get('input[formControlName=date]').type(new Date().toISOString().split('T')[0])
 
     cy.get('mat-select[formControlName=teacher_id]').click(); // Ouvrir la liste
-    cy.contains('Margot DELAHAYE').click(); // Sélectionner l'option
+    cy.contains('Margot DELAHAYE').click(); // Sélectionne Margot
 
-    // Remplir le champ de description
+
     cy.get('textarea[formControlName=description]').type('New Yoga fun session');
 
-
-
     cy.contains('Save').click()
-
-
 
     cy.url().should('include', '/sessions')
   })
@@ -77,11 +71,9 @@ describe('create session spec', () => {
         admin: true
       },
     })
-    // Intercepter l'API des sessions
+
     cy.intercept('GET', '/api/session', []).as('sessions');
 
-
-    // Intercepter l'API des professeurs
     cy.intercept('GET', '/api/teacher', {
       body: [
         { id: 1, firstName: 'Margot', lastName: 'DELAHAYE' },
@@ -89,7 +81,6 @@ describe('create session spec', () => {
       ],
     }).as('createSession');
 
-    // Intercepter l'API de création de session
     cy.intercept('POST', '/api/session', {
       statusCode: 201,
       body: {
@@ -104,7 +95,6 @@ describe('create session spec', () => {
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
 
-    // Naviguer vers la page de création
     cy.contains('Create').click();
     cy.url().should('include', '/sessions/create');
 
@@ -114,11 +104,11 @@ describe('create session spec', () => {
     cy.get('mat-select[formControlName=teacher_id]').click(); // Ouvrir la liste
     cy.contains('Margot DELAHAYE').click(); // Sélectionner l'option
 
-    // Remplir le champ de description
     cy.get('textarea[formControlName=description]').type('New Yoga fun session');
 
     cy.contains('Save').should('be.disabled')
 
+    //pour que l'erreur apparaisse
     cy.get('input[formControlName=name').click()
     cy.get('mat-select[formControlName=teacher_id]').click()
 

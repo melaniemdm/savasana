@@ -95,7 +95,7 @@ describe('Account spec', () => {
       }
     }).as('userInfo')
 
-    // Interception de la requête DELETE pour supprimer une session
+
     cy.intercept('DELETE', '/api/user/1', {
       statusCode: 200,
     }).as('deleteUser')
@@ -111,6 +111,7 @@ describe('Account spec', () => {
 
     // Attendre la requête GET pour les informations utilisateur
     cy.wait('@userInfo');
+
     cy.contains('Detail').click()
     cy.url().should('include', '/')
     cy.contains('Your account has been deleted !').should('be.visible')

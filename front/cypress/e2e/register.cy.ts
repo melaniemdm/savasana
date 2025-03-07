@@ -4,10 +4,10 @@ describe('Register spec', () => {
   it('Register successfull', () => {
     cy.visit('/register')
 
-    // Interception de la requête POST pour l'inscription
+
     cy.intercept('POST', '/api/auth/register', {
-      statusCode: 200, // Répondre avec un statut 200
-    }).as('registerRequest'); // Nommer l'interception
+      statusCode: 200,
+    }).as('registerRequest');
 
     cy.get('input[formControlName=firstName]').type("melanie")
     cy.get('input[formControlName=lastName]').type("lisanna")
@@ -16,7 +16,7 @@ describe('Register spec', () => {
 
     cy.contains('Submit').click()
 
-    // Attendre que la requête POST pour l'inscription soit déclenchée
+    // Attendre que la requête POST pour que l'inscription soit déclenchée
     cy.wait('@registerRequest');
 
     cy.url().should('include', '/login')
@@ -30,7 +30,7 @@ describe('Register spec', () => {
     cy.get('input[formControlName=lastName]').type("lisanna")
     cy.get('input[formControlName=email]').type("mel@studio.com")
 
-    // Vérifier que le bouton de soumission est désactivé
+    // Vérifie que le bouton de soumission est désactivé
     cy.contains('Submit').should('be.disabled')
 
     cy.get('input[formControlName=password').click()

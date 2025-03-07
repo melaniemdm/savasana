@@ -30,7 +30,8 @@ describe('informations sessions spec', () => {
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
 
     cy.url().should('include', '/sessions')
-    //Vérification des elements de l'image
+
+    //Vérification des informations de la session
     cy.contains('Yoga fun bébé').should('be.visible')
     cy.contains('New Yoga fun session for babies').should('be.visible')
     cy.contains('Detail').should('be.visible')
@@ -38,8 +39,8 @@ describe('informations sessions spec', () => {
     cy.contains('Session on ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })).should('be.visible');
     cy.get('img')
       .should('be.visible')
-      .and('have.attr', 'src', 'assets/sessions.png') // Vérifier l'attribut src
-      .and('have.attr', 'alt', 'Yoga session'); // Vérifier l'attribut alt
+      .and('have.attr', 'src', 'assets/sessions.png')
+      .and('have.attr', 'alt', 'Yoga session');
 
   })
   it('delete button appears if the user is an admin', () => {
@@ -67,7 +68,7 @@ describe('informations sessions spec', () => {
       }],
     }).as('session')
 
-    // Interception de la requête GET pour le détail d'une session
+
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -80,6 +81,7 @@ describe('informations sessions spec', () => {
     }).as('sessionDetail')
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
     cy.get('button:has(span.ml1:contains("Detail"))').click()
     cy.contains('delete').should('be.visible')
   })
@@ -108,7 +110,7 @@ describe('informations sessions spec', () => {
       }],
     }).as('session')
 
-    // Interception de la requête GET pour le détail d'une session
+
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -119,8 +121,10 @@ describe('informations sessions spec', () => {
         description: 'New Yoga fun session for babies',
       },
     }).as('sessionDetail')
+
     cy.get('input[formControlName=email]').type("mela@me.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
     cy.get('button:has(span.ml1:contains("Detail"))').click()
     cy.contains('delete').should('not.exist')
   })

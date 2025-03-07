@@ -26,7 +26,6 @@ describe('delete session', () => {
       }],
     }).as('session')
 
-    // Interception de la requête GET pour le détail d'une session
     cy.intercept('GET', '/api/session/1', {
       statusCode: 200,
       body: {
@@ -38,7 +37,6 @@ describe('delete session', () => {
       },
     }).as('sessionDetail')
 
-    // Interception de la requête DELETE pour supprimer une session
     cy.intercept('DELETE', '/api/session/1', {
       statusCode: 200,
     }).as('deleteSession')
@@ -46,23 +44,22 @@ describe('delete session', () => {
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
 
+    // Attend les données de session
     cy.wait('@session')
+
     cy.url().should('include', '/sessions')
-    // Clic sur le bouton "Detail"
+
     cy.get('button:has(span.ml1:contains("Detail"))').click()
 
-
-
-    // Vérification de l'URL après le clic
     cy.url().should('include', 'sessions/detail/1')
 
     cy.contains('Delete').click()
 
-    // Attendre la requête update
+    // Attend la requête update
     cy.wait('@deleteSession')
-    // vérifie que la session est supprimée
+
     cy.contains('Session deleted').should('be.visible');
-    // Vérifier que l'utilisateur est redirigé après la suppression (si redirection prévue)
+
     cy.url().should('include', '/sessions')
   })
 });
