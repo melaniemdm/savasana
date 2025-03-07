@@ -2,9 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from '@jest/globals';
 
 import { SessionService } from './session.service';
-import { TeacherService } from './teacher.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Teacher } from '../interfaces/teacher.interface';
+
+
+import { SessionInformation } from '../interfaces/sessionInformation.interface';
 
 describe('SessionService', () => {
   let service: SessionService;
@@ -18,36 +18,41 @@ describe('SessionService', () => {
     expect(service).toBeTruthy();
   });
 });
-describe('SessionServiceComplementaryTest', () => {
-  let service: TeacherService;
-  let httpMock: HttpTestingController;
 
-  const mockTeacher: Teacher = {
+describe('SessionServiceComplementaryTest ', () => {
+  let service: SessionService;
+
+  const session: SessionInformation = {
+    token: 'sampleToken',
+    type: 'user',
     id: 1,
-    lastName: 'Doe',
-    firstName: 'John',
-    createdAt: new Date('2023-01-01'),
-    updatedAt: new Date('2023-01-02'),
+    username: 'testUser',
+    firstName: 'Test',
+    lastName: 'User',
+    admin: false,
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [TeacherService],
+      providers: [SessionService],
     });
-    service = TestBed.inject(TeacherService);
-    httpMock = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(SessionService);
   });
 
-  afterEach(() => httpMock.verify());
-
-  it('should fetch teacher details', () => {
-    service.detail('1').subscribe((response) => {
-      expect(response).toEqual(mockTeacher);
+  it('should emit true after logIn', (done) => {
+    service.logIn(session);
+    service.$isLogged().subscribe((isLogged) => {
+      expect(isLogged).toBe(true);
+      done();
     });
-
-    const req = httpMock.expectOne('api/teacher/1');
-    expect(req.request.method).toBe('GET');
-    req.flush(mockTeacher);
   });
-})
+
+  it('should emit false after logOut', (done) => {
+    service.logIn(session);
+    service.logOut();
+    service.$isLogged().subscribe((isLogged) => {
+      expect(isLogged).toBe(false);
+      done();
+    });
+  });
+});

@@ -3,8 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from '@jest/globals';
 
 import { TeacherService } from './teacher.service';
-import { SessionService } from './session.service';
-import { SessionInformation } from '../interfaces/sessionInformation.interface';
+
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Teacher } from '../interfaces/teacher.interface';
 
 describe('TeacherService', () => {
   let service: TeacherService;
@@ -22,42 +23,38 @@ describe('TeacherService', () => {
     expect(service).toBeTruthy();
   });
 });
-
 describe('TeacherServiceComplementaryTest', () => {
-  let service: SessionService;
+  let service: TeacherService;
+  let httpMock: HttpTestingController;
 
-  const session: SessionInformation = {
-    token: 'sampleToken',
-    type: 'user',
+  const mockTeacher: Teacher = {
     id: 1,
-    username: 'testUser',
-    firstName: 'Test',
-    lastName: 'User',
-    admin: false,
+    lastName: 'Doe',
+    firstName: 'John',
+    createdAt: new Date('2023-01-01'),
+    updatedAt: new Date('2023-01-02'),
   };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SessionService],
+      imports: [HttpClientTestingModule],
+      providers: [TeacherService],
     });
-    service = TestBed.inject(SessionService);
+    service = TestBed.inject(TeacherService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should emit true after logIn', (done) => {
-    service.logIn(session);
-    service.$isLogged().subscribe((isLogged) => {
-      expect(isLogged).toBe(true);
-      done();
-    });
-  });
+  afterEach(() => httpMock.verify());
 
-  it('should emit false after logOut', (done) => {
-    service.logIn(session);
-    service.logOut();
-    service.$isLogged().subscribe((isLogged) => {
-      expect(isLogged).toBe(false);
-      done();
+  it('should fetch teacher details', () => {
+    service.detail('1').subscribe((response) => {
+      expect(response).toEqual(mockTeacher);
     });
+
+    const req = httpMock.expectOne('api/teacher/1');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockTeacher);
   });
-});
+})
+
 
