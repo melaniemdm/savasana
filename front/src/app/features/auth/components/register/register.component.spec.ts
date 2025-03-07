@@ -121,17 +121,17 @@ describe('RegisterComponent Integration Test', () => {
       password: 'password123',
     });
 
-    // Appeler la méthode submit
+    
     component.submit();
 
-    // Vérifications
+    
     expect(authServiceMock.register).toHaveBeenCalledWith({
       email: 'test@example.com',
       firstName: 'Test',
       lastName: 'User',
       password: 'password123',
     });
-    expect(component.onError).toBe(true); // Vérifie que onError est défini à true
-    expect(routerMock.navigate).not.toHaveBeenCalled(); // Vérifie qu'aucune navigation n'a eu lieu
+    expect(component.onError).toBe(true);
+    expect(routerMock.navigate).not.toHaveBeenCalled(); 
   });
 });

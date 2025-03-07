@@ -48,7 +48,7 @@ describe('DetailComponent', () => {
 describe('DetailComponentComplementaryTest', () => {
   let component: DetailComponent;
   let fixture: ComponentFixture<DetailComponent>;
-  let sessionApiService: jest.Mocked<SessionApiService>;
+  //let sessionApiService: jest.Mocked<SessionApiService>;
 
   const mockSessionService = {
     sessionInformation: {
@@ -74,7 +74,7 @@ describe('DetailComponentComplementaryTest', () => {
     fixture.detectChanges();
   });
 
-  it('should call window.history.back() when back() is invoked', () => {
+  it('should call window.history.back() when back() is called', () => {
     const historyBackSpy = jest.spyOn(window.history, 'back'); // Spy sur window.history.back
 
     component.back();

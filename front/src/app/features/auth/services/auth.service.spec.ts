@@ -37,13 +37,13 @@ describe('AuthService', () => {
     };
 
     service.register(mockRegisterRequest).subscribe((response) => {
-      expect(response).toBeUndefined(); // La réponse est vide
+      expect(response).toBeUndefined(); // La réponse est vide puisque le backend n'est pas lancé
     });
 
     const req = httpMock.expectOne('api/auth/register');
     expect(req.request.method).toBe('POST'); // Vérifie que la méthode est POST
     expect(req.request.body).toEqual(mockRegisterRequest); // Vérifie le corps de la requête
-    req.flush(null); // Simule une réponse vide
+    req.flush(null); // vide le contenu de requete
   });
 
   it('should send a POST request for login and return SessionInformation', () => {
