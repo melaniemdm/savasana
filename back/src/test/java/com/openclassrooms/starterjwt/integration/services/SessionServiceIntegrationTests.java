@@ -25,9 +25,8 @@ import java.util.List;
  * - Vérifie la persistance des données et l'interaction avec les repositories
  */
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @ActiveProfiles("test")
-@Transactional
+
 public class SessionServiceIntegrationTests {
     @Autowired
     private SessionService sessionService;
@@ -41,6 +40,7 @@ public class SessionServiceIntegrationTests {
     private User user;
     private Session session;
     private List<User> users = new ArrayList<>();
+
     @BeforeEach
     void setUp() {
         // Création d'un user
