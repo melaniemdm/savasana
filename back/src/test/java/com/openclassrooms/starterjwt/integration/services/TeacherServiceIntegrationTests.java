@@ -29,6 +29,7 @@ public class TeacherServiceIntegrationTests {
         teacher = new Teacher();
         teacher.setLastName("Doe");
         teacher.setFirstName("John");
+
         teacher = teacherRepository.save(teacher);
     }
     @Test

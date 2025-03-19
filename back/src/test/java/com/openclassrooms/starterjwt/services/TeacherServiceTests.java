@@ -37,6 +37,7 @@ public class TeacherServiceTests {
         teacher2.setId(2L);
         teacher2.setFirstName("Teacher FirstName Two");
         teacher2.setLastName("Teacher LastName Two");
+
         when(teacherRepository.findAll()).thenReturn(Arrays.asList(teacher1, teacher2));
 
         // Act

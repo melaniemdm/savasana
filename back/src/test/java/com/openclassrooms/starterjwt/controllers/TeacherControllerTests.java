@@ -81,6 +81,7 @@ class TeacherControllerTests {
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
+        // Vérifie que la liste retournée contient bien teacherDto
         assertTrue(((List<?>) response.getBody()).contains(teacherDto));
     }
 }
