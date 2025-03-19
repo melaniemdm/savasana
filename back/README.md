@@ -97,9 +97,11 @@ The application will be accessible at http://localhost:8080.
 ## Test
 
 To execute all unit and integration tests:
+
 > mvn clean test
 
 The coverage report will be available in:
+
 > target/site/jacoco/index.html
 
 ## Key Code Sections

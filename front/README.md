@@ -61,7 +61,7 @@ Report is available here:
 
 > front/coverage/lcov-report/index.html
 
-#### Unitary test
+#### Unit and integration tests
 
 Launching test:
 
@@ -70,3 +70,7 @@ Launching test:
 for following change:
 
 > npm run test:watch
+
+Report is available here:
+
+> front/coverage/jest/lcov-report/index.html
